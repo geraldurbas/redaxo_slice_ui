@@ -1,0 +1,68 @@
+.slice_ui img {
+  width: 16px;
+  height: auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.btn-copy {
+  color: #fff;
+  background: #3bb594;
+  border-color: #3bb594;
+}
+.btn-cut {
+  color: #fff;
+  background: #e8a800;
+  border-color: #e8a800;
+}
+.btn-paste {
+  color: #fff;
+  background: #4b9ad9;
+  border-color: #4b9ad9;
+}
+
+.btn-cut,
+.btn-copy,
+.btn-paste,
+.btn-visible,
+.btn-invisible {
+  color: #000;
+  background: #fff;
+  border-color: #ccc;
+}
+.btn-cut:hover,
+.btn-copy:hover,
+.btn-paste:hover,
+.btn-visible:hover,
+.btn-invisible:hover {
+  color: #000;
+  background: #e6e6e6;
+  border-color: #adadad;
+}
+
+
+.fa-copy:before,
+.rex-icon-copy:before {
+  content: "\f0c5";
+}
+.fa-cut:before,
+.rex-icon-cut:before {
+  content: "\f0c4";
+}
+.fa-paste:before,
+.rex-icon-paste:before {
+  content: "\f0ea";
+}
+.fa-emptyclip:before,
+.rex-icon-emptyclip:before {
+  content: "\f127";
+}
+
+.fa-visible:before,
+.rex-icon-visible:before {
+  content: "\f06e";
+}
+.fa-invisible:before,
+.rex-icon-invisible:before {
+  content: "\f070";
+}

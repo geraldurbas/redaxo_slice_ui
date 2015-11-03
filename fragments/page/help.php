@@ -1,0 +1,2 @@
+<p>FDL Copy fügt jedem Slice bis zu drei neue Icons hinzu. Dabei wird berücksichtigt, welche Aktion von einem Benutzer gewählt wurde. Wählt der Benutzer die Funktion Ausschneiden, kann er den Slice nicht nach sich selbst einfügen.</p>
+<p>@todo :)</p>
