@@ -1,21 +1,51 @@
-# Addon: FDL Copy
+# Addon: Slice UI
 #---------------
 
 # Addon-Eintrag und Addon-Titel
-slice_ui_menu_link = FDL Copy
+slice_ui_title = Slice UI
+slice_ui_menu_link = Slice UI
+slice_ui_version = 1.0
+
+
+slice_ui_settings = Settings
+slice_ui_help = Help
+slice_ui_config = Module settings
+slice_ui_configfile_update = Settings saved succesfully
+
+
+slice_ui_allow_modules = Allowed modules
+slice_ui_config_modules = Choose module/slices
+slice_ui_template_headline = CTypes for templates:
+slice_ui_modules_available_all = For all modules allowed
+slice_ui_ctypes_available_all = For all ctypes allowed
+slice_ui_ctypes_available = Only for choosen ctypes allowed
+
+
 slice_ui_copy = Copy
+slice_ui_copied = Slice copied
 
-slice_ui_copied = Item copied
+slice_ui_cut = Cut
+slice_ui_cutted = Slice cutted
+
+slice_ui_paste = Paste
 slice_ui_insert = Paste
-slice_ui_inserted = Item pasted
-slice_ui_reset_clipboard = Clear Clipboard
+slice_ui_inserted = Slice pasted
+slice_ui_slice_ui_pasted = Slice pasted
 
-slice_ui_config = Addon settings
+slice_ui_toggle_visible = Deactivate slice
+slice_ui_toggle_invisible = Activate slice
+slice_ui_slice_toggled = Slice successfully toggled
 
-slice_ui_configfile_update = Settings successful saved
+slice_ui_reset_clipboard = Clear clipboard
+slice_ui_clipboard_resetted = Clipboard resetted
+
+
+#Permissions
+perm_general_copy[] = Slice UI
+perm_options_slice_ui[] = Copy slices
+perm_options_slice_ui[settings] = Able to config Slice UI
+
 
 #Buttons
-slice_ui_settings_save = Übernehmen
-
-# Versionen
-slice_ui_version = 1.0
+save = Save
+reset = Reset

@@ -14,22 +14,22 @@ class slice_ui {
 
     $Icons = array(
       array(
-        'hidden_label' => 'translate:copy',
+        'hidden_label' => rex_i18n::msg('slice_ui_copy'),
         'url' => 'index.php?page=content/copy&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
         'attributes' => array(
           'class' => array('btn btn-copy'),
-          'title' => 'translate:copy',
-          'data-title-online' => 'translate:slice_ui_copied'
+          'title' =>rex_i18n::msg('slice_ui_copy'),
+          'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_copied')
         ),
         'icon' => 'copy'
       ),
       array(
-        'hidden_label' => '',
+        'hidden_label' => rex_i18n::msg('slice_ui_cut'),
         'url' => 'index.php?page=content/cut&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
         'attributes' => array(
           'class' => array('btn btn-cut'),
-          'title' => 'translate:copy',
-          'data-title-online' => 'translate:slice_ui_cutted'
+          'title' => rex_i18n::msg('slice_ui_cut'),
+          'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_cutted')
         ),
         'icon' => 'cut'
       ),
@@ -47,12 +47,12 @@ class slice_ui {
 
     if(!empty($_SESSION['slice_ui']['slice_id']) && $_SESSION['slice_ui']['slice_id'] !== $ep->getParam('slice_id') || ($_SESSION['slice_ui']['slice_id'] === $ep->getParam('slice_id') && $_SESSION['slice_ui']['cut'] !== true)) {
       $Icons[0] = array(
-        'hidden_label' => '',
+        'hidden_label' => rex_i18n::msg('slice_ui_paste'),
         'url' => 'index.php?page=content/pasteAfter&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
         'attributes' => array(
           'class' => array('btn btn-paste'),
-          'title' => 'translate:copy',
-          'data-title-online' => 'translate:slice_ui_pasted'
+          'title' => rex_i18n::msg('slice_ui_paste'),
+          'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_pasted')
         ),
         'icon' => 'paste',
       );
@@ -69,13 +69,13 @@ class slice_ui {
       $mode = 'invisible';
 
     $Icons[] = array(
-      'hidden_label' => '',
-      'url' => 'index.php?page=content/toggleSlice&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
+      'hidden_label' => rex_i18n::msg('slice_ui_toggle_'.$mode),
+      'url' => 'index.php?page=content/toggleSlice&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype').'&visible='.$sql->getValue('active'),
       'attributes' => array(
         'class' => array('btn btn-'.$mode),
-        'title' => 'translate:'.$mode,
+        'title' => rex_i18n::msg('slice_ui_toggle_'.$mode),
         'data-pjax-container' => '#rex-js-page-container',
-        'data-title-online' => 'translate:slice_ui_'.$mode
+        'data-title-online' => rex_i18n::msg('slice_ui_slice_toggled')
       ),
       'icon' => $mode,
     );
@@ -140,6 +140,9 @@ class slice_ui {
 
     $_SESSION['slice_ui'] = array('slice_id'=>$slice_id,'article_id'=>$article_id,'clang'=>$clang,'module_id'=>$module_id,'ctype'=>$ctype,'cut'=>(rex_get('page') === 'content/cut'));
 
+    // ----- EXTENSION POINT
+    rex_extension::registerPoint(new rex_extension_point('SLICE_COPIED', '', $_SESSION['slice_ui']));
+
     // Alle OBs schließen
     while (@ob_end_clean());
     header("Location: ".rex_url::backendController().'?page=content/edit&article_id='.rex_get('article_id').'&clang='.$clang.'&ctype='.$ctype);
@@ -156,10 +159,26 @@ class slice_ui {
   }
 
   public static function toggleSlice() {
+    $slice_id = rex_get('slice_id');
+    $article_id = rex_get('article_id');
+    $clang = rex_get('clang');
+    $module_id = rex_get('module_id');
+    $ctype = rex_get('ctype');
+    $visible = rex_get('visible');
 
     $sql = rex_sql::factory();
     $sql->setQuery("UPDATE ".rex::getTablePrefix().'article_slice'." SET active = CASE WHEN active = 1 THEN 0 ELSE 1 END WHERE id = ?",array(rex_get('slice_id')));
     self::regenerateArticle();
+
+    rex_extension::registerPoint(new rex_extension_point('SLICE_TOGGLED', '', [
+      'slice_id' => $slice_id,
+      'article_id' => $article_id,
+      'clang' => $clang,
+      'module_id' => $module_id,
+      'ctype' => $ctype,
+      'visible' => $visible,
+    ]));
+
     // Alle OBs schließen
     while (@ob_end_clean());
     header("Location: ".rex_url::backendController().'?page=content/edit&article_id='.rex_get('article_id').'&clang='.rex_get('clang').'&ctype='.rex_get('ctype'));
@@ -240,7 +259,7 @@ class slice_ui {
         $function = '';
 
         // ----- EXTENSION POINT
-        $info = rex_extension::registerPoint(new rex_extension_point('SLICE_PASTED', $info, [
+        rex_extension::registerPoint(new rex_extension_point('SLICE_PASTED', '', [
           'article_id' => $article_id,
           'clang' => $clang,
           'function' => $function,
@@ -317,6 +336,7 @@ class slice_ui {
       if(
         (!empty($AddonPerm['modules']) && !in_array('all',$AddonPerm['modules']) && !in_array($ep['module_id'],$AddonPerm['modules'])) || 
         (!empty($AddonPerm['ctypes']) && !in_array('all',$AddonPerm['ctypes']) && !in_array($ep['ctype'],$AddonPerm['ctypes']))) {
+
         return false;
       }
     }
