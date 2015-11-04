@@ -170,6 +170,7 @@ class slice_ui {
     $sort = 'DESC';
     if($dir == 1)
       $sort = 'ASC';
+
     rex_sql_util::organizePriorities(
       rex::getTable('article_slice'),
       'priority',
@@ -177,8 +178,7 @@ class slice_ui {
       'priority, updatedate '.$sort
     );
 
-    // self::regenerateArticle();
-    echo 'Reset: Priority: '.$prio.' Slice: '.$slice_id;
+    self::regenerateArticle();
     exit();
   }
 
