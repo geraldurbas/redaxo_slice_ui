@@ -14,6 +14,7 @@ if(strpos(rex_request('page'),'content/emptyclipboard') !== false)
 
 rex_view::addCssFile($this->getAssetsUrl('slice_ui.css'));
 rex_view::addCssFile($this->getAssetsUrl('jquery-ui.datepicker.css'));
+
 rex_view::addJsFile($this->getAssetsUrl('slice_ui.js'));
 rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.js'));
 
@@ -40,7 +41,7 @@ rex_extension::register('SLICE_SHOW','slice_ui::isActive');
 $Config = rex_config::get('slice_ui');
 
 /* Slice-Menü überschreiben */
-if(!empty($_SESSION['slice_ui']) && !empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
+if(!empty($_SESSION['slice_ui']['slice_id']) && !empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
   $Content = rex_plugin::get('structure','content');
   $ContentPages = $Content->getProperty('pages');
   $ContentPages['content']['subpages']['paste'] = array(

@@ -122,6 +122,17 @@ class slice_ui {
 
       $Subject = str_replace('<div class="panel-body">',$content.'<div class="panel-body">',$Subject);
     }
+
+    $strSubject = rex_extension::registerPoint(new rex_extension_point('ADD_SLICE_FORMS', '', [
+      'slice_id' => $ep->getParam('slice_id'),
+      'article_id' => $ep->getParam('article_id'),
+      'clang' => $ep->getParam('clang'),
+      'ctype' => $ep->getParam('ctype'),
+      'content' => $Subject
+    ]));
+
+    if($strSubject)
+      $Subject = $strSubject;
     
     return $Subject;
   }
@@ -432,5 +443,3 @@ class slice_ui {
     }
   }
 }
-
-?>

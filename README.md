@@ -46,6 +46,10 @@ Wird ausgeführt nachdem ein Slice kopiert oder ausgeschnitten wurde. Mit dem Pa
 
 Wird ausgeführt, wenn ein Slice aktiviert bzw. deaktiviert wird.
 
+####ADD_SLICE_FORMS
+
+Kann dazu verwendet werden, weitere Felder über einen Slice zu schreien. 
+
 ##Features
 
 - Slice-Groups damit eine Gruppe Slices kopiert und verschoben werden kann.
