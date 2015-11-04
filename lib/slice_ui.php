@@ -89,6 +89,36 @@ class slice_ui {
     return $Icons;
   }
 
+  public static function addOnlineForm(rex_extension_point $ep) {
+    $Config = rex_config::get('slice_ui');
+
+    $Subject = $ep->getSubject();
+    if(rex::isBackend() && (empty($Config['online_from_to']) || in_array($ep->getParam('module_id'),$Config['online_from_to']) || in_array('all',$Config['online_from_to']))) {
+      $article_id = rex_get('article_id');
+      $clang = rex_get('clang');
+      $ctype = rex_get('ctype');
+
+      $sql = rex_sql::factory();
+      $sql->setTable(rex::getTablePrefix().'article_slice');
+      $sql->setWhere(array('id'=>$ep->getParam('slice_id')));
+      $sql->select();
+
+      $online_from = $sql->getValue('online_from');
+      $online_to = $sql->getValue('online_to');
+
+      $fragment = new rex_fragment();
+      $fragment->setVar('action', 'index.php?page=content/status&article_id='.$article_id.'&clang='.$clang.'&ctype='.$clang, false);
+      $fragment->setVar('slice_id', $ep->getParam('slice_id'), false);
+      $fragment->setVar('online_from', $online_from?date('d.m.Y',$online_from):null, false);
+      $fragment->setVar('online_to', $online_to?date('d.m.Y',$online_to):null, false);
+      $content = $fragment->parse('status/status.php');
+
+      $Subject = str_replace('<div class="panel-body">',$content.'<div class="panel-body">',$Subject);
+    }
+    
+    return $Subject;
+  }
+
   public static function isActive(rex_extension_point $ep) {
 
     $sql = rex_sql::factory();
@@ -96,12 +126,16 @@ class slice_ui {
     $sql->setWhere(array('id'=>$ep->getParam('slice_id')));
     $sql->select();
 
-    if($sql->getValue('active') == 1 || rex::isBackend())
-      return $ep->content;
+    $online_from = $sql->getValue('online_from');
+    $online_to = $sql->getValue('online_to');
+
+    if(rex::isBackend() ||
+      ($sql->getValue('active') == 1 && (empty($online_from) || (!empty($online_from) && $online_from < time())) && (empty($online_to) || (!empty($online_to) && $online_to >= time())))
+    ) return $ep->getSubject();
     return '';
   }
 
-  public static function copySlice($slice_id = false,$clang = false,$module_id = false) {
+  public static function copySlice($slice_id = false,$clang = false,$module_id = false,$ctype=false,$article_id=false) {
     if(!$slice_id) $slice_id = rex_get('slice_id');
     if(!$article_id) $article_id = rex_get('article_id');
     if(!$clang) $clang = rex_get('clang');
@@ -119,8 +153,11 @@ class slice_ui {
     exit;
   }
 
-  public function emptyClipboard() {
-    unset($_SESSION['slice_ui']);
+  public static function emptyClipboard($reset=false) {
+    $_SESSION['slice_ui'] = ['slice_id'=>null,'article_id'=>null,'clang'=>null,'module_id'=>null,'ctype'=>null,'cut'=>null];
+
+    if($reset)
+      return;
 
     // Alle OBs schließen
     while (@ob_end_clean());
@@ -136,18 +173,40 @@ class slice_ui {
     $ctype = rex_get('ctype');
     $visible = rex_get('visible');
 
-    $sql = rex_sql::factory();
-    $sql->setQuery("UPDATE ".rex::getTablePrefix().'article_slice'." SET active = CASE WHEN active = 1 THEN 0 ELSE 1 END WHERE id = ?",array(rex_get('slice_id')));
-    self::regenerateArticle();
+    $update_slice_status = rex_post('update_slice_status');
+    $online_from = rex_post('online_from');
+    $online_to = rex_post('online_to');
 
-    rex_extension::registerPoint(new rex_extension_point('SLICE_TOGGLED', '', [
-      'slice_id' => $slice_id,
-      'article_id' => $article_id,
-      'clang' => $clang,
-      'module_id' => $module_id,
-      'ctype' => $ctype,
-      'visible' => $visible,
-    ]));
+    $sql = rex_sql::factory();
+    // $sql->setDebug();
+
+    if(empty($update_slice_status)) {
+      $sql->setQuery("UPDATE ".rex::getTablePrefix().'article_slice'." SET active = CASE WHEN active = 1 THEN 0 ELSE 1 END WHERE id = ?",array($slice_id));
+      self::regenerateArticle();
+
+      rex_extension::registerPoint(new rex_extension_point('SLICE_TOGGLED', '', [
+        'slice_id' => $slice_id,
+        'article_id' => $article_id,
+        'clang' => $clang,
+        'module_id' => $module_id,
+        'ctype' => $ctype,
+        'visible' => $visible,
+      ]));
+    } else {
+      $slice_id = rex_post('slice_id');
+      if(!empty($online_from)) {
+        $online_from = explode('.',$online_from);
+        $online_from = mktime(0,0,0,$online_from[1],$online_from[0],$online_from[2]);
+      } else $online_from = 0;
+
+      if(!empty($online_to)) {
+        $online_to = explode('.',$online_to);
+        $online_to = mktime(0,0,0,$online_to[1],$online_to[0],$online_to[2]);
+      } else $online_to = 0;
+
+      $sql->setQuery("UPDATE ".rex::getTablePrefix().'article_slice'." SET online_from = ?, online_to = ? WHERE id = ?",array($online_from,$online_to,$slice_id));
+      self::regenerateArticle($slice_id,$clang,$module_id,$ctype,$article_id);
+    }
 
     // Alle OBs schließen
     while (@ob_end_clean());
@@ -191,6 +250,7 @@ class slice_ui {
     $module_id  = $_SESSION['slice_ui']['module_id'];
     $clang      = rex_get('clang');
     $ctype      = rex_get('ctype');
+    $category_id = rex_get('category_id');
 
     if(!self::checkPermissions(array(
       'article_id' => $article_id,
@@ -239,8 +299,6 @@ class slice_ui {
       try {
         $newsql->insert();
 
-        $info = $action_message.rex_i18n::msg('block_added');
-
         $slice_id = $newsql->getLastId();
         if($slice_id !== 0)
           $_SESSION['slice_ui']['slice_id'] = $slice_id;
@@ -265,8 +323,8 @@ class slice_ui {
           'ctype' => $ctype,
           'category_id' => $category_id,
           'module_id' => $module_id,
-          'article_revision' => &$article_revision,
-          'slice_revision' => &$slice_revision,
+          'article_revision' => 0,
+          'slice_revision' => 0,
         ]));
 
 
@@ -322,7 +380,9 @@ class slice_ui {
     if($template_attributes === null)
       $template_attributes = array();
 
-    $AddonPerm['ctypes'] = $AddonPerm['ctypes'][$article->getValue('template_id')];
+    if(!empty($AddonPerm['ctypes']))
+      $AddonPerm['ctypes'] = $AddonPerm['ctypes'][$article->getValue('template_id')];
+
     if(!rex_template::hasModule($template_attributes,$ep['ctype'],$ep['module_id'])) {
       return false;
     } elseif (!(rex::getUser()->isAdmin() || rex::getUser()->hasPerm('module['.$ep['module_id'].']') || rex::getUser()->hasPerm('module[0]'))) {
@@ -340,17 +400,12 @@ class slice_ui {
     return true;
   }
 
-  public static function regenerateArticle($slice_id = false,$clang = false,$module_id = false) {
+  public static function regenerateArticle($slice_id = false,$clang = false,$module_id = false,$ctype = false,$article_id = false) {
     if(!$slice_id) $slice_id = rex_get('slice_id');
     if(!$article_id) $article_id = rex_get('article_id');
     if(!$clang) $clang = rex_get('clang');
     if(!$module_id) $module_id = rex_get('module_id');
     if(!$ctype) $ctype = rex_get('ctype');
-
-    $newsql = rex_sql::factory();
-    $action = new rex_article_action($module_id, $function, $newsql);
-    $action->setRequestValues();
-    $action->exec(rex_article_action::PRESAVE);
 
     // ----- artikel neu generieren
     $EA = rex_sql::factory();
@@ -364,12 +419,6 @@ class slice_ui {
       'id' => $article_id,
       'clang' => $clang,
     ]));
-
-    // ----- POST SAVE ACTION [ADD/EDIT/DELETE]
-    $action->exec(rex_article_action::POSTSAVE);
-    if ($messages = $action->getMessages()) {
-      $info .= '<br />' . implode('<br />', $messages);
-    }
 
     if (rex_post('btn_save', 'string')) {
       $function = '';

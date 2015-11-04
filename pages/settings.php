@@ -5,12 +5,11 @@ $message = '';
 if(rex_post('btn_save', 'string') != '') {
 
   $pValues = rex_post('slice_ui', [
+    ['general', 'array'],
+    ['online_from_to', 'array'],
     ['modules', 'array'],
     ['ctypes', 'array'],
   ]);
-
-  if(in_array('all',$pValues['modules']))
-    $pValues['modules'] = array();
 
   foreach($pValues['ctypes'] as $cKey => $ctypes) {
     if(in_array('all',$ctypes))
@@ -21,20 +20,53 @@ if(rex_post('btn_save', 'string') != '') {
   $message = $this->i18n('config_saved_successful');
 }
 
+$Values = $this->getConfig('online_from_to');
+
+$sql = rex_sql::factory();
+$modules = $sql->getArray("SELECT id,name FROM ".rex::getTablePrefix()."module");
+
+$sections = '';
+
+/* GENERAL */
+$content = '';
+$fragment = new rex_fragment();
+$fragment->setVar('toggleFields','.online_from_to',false);
+$fragment->setVar('name', 'slice_ui[online_from_to][]', false);
+$fragment->setVar('checked', (!empty($Values) && $Values[0] == 'all'?true:false), false);
+$fragment->setVar('value', 'all', false);
+$fragment->setVar('label', rex_i18n::msg('slice_ui_online_from_to'), false);
+$content .= $fragment->parse('form/checkbox.php');
+
+$fragment = new rex_fragment();
+$fragment->setVar('group', 'online_from_to', false);
+$fragment->setVar('name', 'slice_ui[online_from_to][]', false);
+$fragment->setVar('min', count($modules), false);
+$fragment->setVar('size', 5, false);
+$fragment->setVar('multiple', true, false);
+$fragment->setVar('selected',$Values,false);
+$fragment->setVar('label', rex_i18n::msg('modules_available'), false);
+$fragment->setVar('options',$modules,false);
+$fragment->setVar('info',rex_i18n::msg('ctrl'),false);
+$content .= $fragment->parse('form/select.php');
+
+$fragment = new rex_fragment();
+$fragment->setVar('class', 'edit', false);
+$fragment->setVar('title', rex_i18n::msg('slice_ui_online_from_to_title'));
+$fragment->setVar('body', $content, false);
+$sections .= $fragment->parse('core/page/section.php');
+$content = '';
+
 /* MODULES */
 $Values = $this->getConfig('modules');
 
 $content = '';
 $fragment = new rex_fragment();
 $fragment->setVar('name', 'slice_ui[modules][]', false);
-$fragment->setVar('checked', ($Values[0] == 'all' || empty($Values)?true:false), false);
+$fragment->setVar('checked', (!empty($Values) && $Values[0] == 'all'?true:false), false);
 $fragment->setVar('value', 'all', false);
 $fragment->setVar('label', $this->i18n('modules_available_all'), false);
 $fragment->setVar('toggleFields','.allmodules',false);
 $content .= $fragment->parse('form/checkbox.php');
-
-$sql = rex_sql::factory();
-$modules = $sql->getArray("SELECT id,name FROM ".rex::getTablePrefix()."module");
 
 $fragment = new rex_fragment();
 $fragment->setVar('group', 'allmodules', false);

@@ -21,6 +21,10 @@ $(function(){
     e.preventDefault();
   });
 
+  $('.panel-form input[type="text"]').datepicker({
+    dateFormat: 'dd.mm.yy'
+  });
+
   if($.ui !== undefined) {
     /* Remove buttons if javascript is enabled, we don't need'em */
     $('.rex-icon-up,.rex-icon-down').parents('.btn-group').remove();
