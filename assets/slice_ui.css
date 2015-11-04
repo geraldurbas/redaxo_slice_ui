@@ -4,6 +4,25 @@
   -webkit-user-select: none;
   user-select: none;
 }
+
+.rex-main-content .rex-page-nav .nav-tabs {
+  -webkit-transition: border-color .25s;
+  -o-transition: border-color .25s;
+  transition: border-color .25s;
+}
+.rex-main-content .rex-page-nav.sticky {
+  top: 0;
+  z-index: 1000;
+  position: fixed;
+}
+.rex-main-content .rex-page-nav.sticky .nav-tabs {
+  border-color: transparent;
+}
+.rex-main-content .rex-page-nav.sticky + * {
+  margin-top: 64px;
+}
+
+/* Slice Form */
 .panel-form {
   padding: 14px 15px;
   border-bottom: 1px solid #dfe3e9;

@@ -9,8 +9,17 @@ slice_ui_version = 1.0
 
 slice_ui_settings = Settings
 slice_ui_help = Help
+slice_ui_general = General settings
+slice_ui_online_from_to_title = Online from/to
 slice_ui_config = Module settings
 slice_ui_configfile_update = Settings saved succesfully
+
+slice_ui_copy_n_cut = Activate copy/cut
+slice_ui_drag_n_drop = Sort slices with Drag&Drop
+slice_ui_slice_status = Add online/offline icon
+slice_ui_keep_move_arrows = Keep the move up / move down arrows
+slice_ui_online_from_to = Online fron/to for modules allowed
+slice_ui_sticky_slice_nav = Sticky slice buttons 
 
 
 slice_ui_allow_modules = Allowed modules
@@ -38,6 +47,9 @@ slice_ui_slice_toggled = Slice successfully toggled
 
 slice_ui_reset_clipboard = Clear clipboard
 slice_ui_clipboard_resetted = Clipboard resetted
+
+slice_ui_move = Move 
+slice_ui_moved = Slice moved
 
 
 #Permissions

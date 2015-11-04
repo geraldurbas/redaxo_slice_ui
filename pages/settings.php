@@ -54,6 +54,11 @@ $fragment->setVar('checked', (!empty($Values['keep_move_arrows']) && $Values['ke
 $fragment->setVar('label', rex_i18n::msg('slice_ui_keep_move_arrows'), false);
 $content .= $fragment->parse('form/checkbox.php');
 
+$fragment->setVar('name', 'slice_ui[general][sticky_slice_nav]', false);
+$fragment->setVar('checked', (!empty($Values['sticky_slice_nav']) && $Values['sticky_slice_nav'] == '1'?true:false), false);
+$fragment->setVar('label', rex_i18n::msg('slice_ui_sticky_slice_nav'), false);
+$content .= $fragment->parse('form/checkbox.php');
+
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit', false);
 $fragment->setVar('title', rex_i18n::msg('slice_ui_general'));

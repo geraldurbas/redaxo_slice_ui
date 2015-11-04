@@ -19,6 +19,7 @@ slice_ui_drag_n_drop = Slices sortieren mit Drag&Drop
 slice_ui_slice_status = Online/Offline-Icon hinzufügen
 slice_ui_keep_move_arrows = Slice hoch/runter bewegen beibehalten
 slice_ui_online_from_to = Online von/bis für alle Module verfügbar
+slice_ui_sticky_slice_nav = Slice-Buttons sollen mit-scrollen
 
 
 slice_ui_allow_modules = Erlaubte Module
