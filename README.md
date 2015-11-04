@@ -30,6 +30,32 @@ Die Kopierfunktion kann auf einzelne Module und auch auf einzelne CTypes beschr�
 
 ![Konfiguration](/../assets/slice_ui_settings.png?raw=true)
 
+###Allgemeine Einstellungen
+
+####Kopieren/Ausschneiden aktivieren
+
+Diese Option aktiviert alle Kopier-, Ausschneide- und Einfügeoptionen.
+
+####Slices sortieren mit Drag&Drop
+
+Slices sortieren via Drag&Drop. Diese Option fügt ein Icon hinzu, mit dem man Slices sortieren kann. Das Icon wurde gewählt, damit Redakteure nicht versehentlich Slices verschieben.
+
+####Online/Offline-Icon hinzufügen
+
+Nach aktivieren dieser Option, kann der Redakteur Slices online bzw. offline schalten.
+
+####Slice hoch/runter bewegen beibehalten
+
+Das Addon entfernt die Buttons `Slice hoch bewegen` und `Slice runter bewegen`. Diese Option verhindert das, da Slices mit viel Output umständlicher zu bewegen sind.
+
+####Sticky Header
+
+Die Option `Slice-Buttons sollen mit-scrollen` lädt ein Javascript welches die Buttons über den Slices mir-scrollen lässt. Diese Option ist in Artikeln mit sehr vielen Slices hilfreich, wenn das Clipboard geleert werden, oder das Frontend angezeigt werden soll. 
+
+###Online von/bis
+
+Slices können mit dieser Option für einen bestimmten Zeitrahmen aktiviert werden.
+
 ##Extension points
 
 Diese Extension points sind eingebaut, aber noch nicht getestet.
