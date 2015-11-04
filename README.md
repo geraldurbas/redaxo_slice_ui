@@ -34,15 +34,15 @@ Die Kopierfunktion kann auf einzelne Module und auch auf einzelne CTypes beschr�
 
 Diese Extension points sind eingebaut, aber noch nicht getestet.
 
-###SLICE_PASTED
+####SLICE_PASTED
 
 Wird ausgeführt nachdem der Slice eingefügt wurde. Übergibt alle Parameter die SLICE_ADDED übergibt.
 
-###SLICE_COPIED
+####SLICE_COPIED
 
 Wird ausgeführt nachdem ein Slice kopiert oder ausgeschnitten wurde. Mit dem Parameter cut=1 kann geprüft werden, ob kopiert oder ausgeschnitten wurde.
 
-###SLICE_TOGGLED
+####SLICE_TOGGLED
 
 Wird ausgeführt, wenn ein Slice aktiviert bzw. deaktiviert wird.
 
