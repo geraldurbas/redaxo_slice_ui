@@ -36,6 +36,9 @@ slice_ui_toggle_visible = Slice deaktivieren
 slice_ui_toggle_invisible = Slice aktivieren
 slice_ui_slice_toggled = Slice erfolgreich umgestellt
 
+slice_ui_move = Verschieben 
+slice_ui_moved = Slice verschoben
+
 slice_ui_reset_clipboard = Clipboard löschen
 slice_ui_clipboard_resetted = Clipboard zurückgesetzt
 

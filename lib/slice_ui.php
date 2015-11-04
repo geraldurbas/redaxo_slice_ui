@@ -4,20 +4,15 @@ class slice_ui {
 
   public static function modifySliceEditMenu(rex_extension_point $ep) {
 
-
     // rex_extension_point Object ( [name:rex_extension_point:private] => ART_SLICE_MENU [subject:rex_extension_point:private] => Array ( ) [params:rex_extension_point:private] => Array ( [article_id] => 1 [clang] => 1 [ctype] => 1 [module_id] => 1 [slice_id] => 1 [perm] => 1 ) [extensionParams:rex_extension_point:private] => Array ( ) [readonly:rex_extension_point:private] => ) rex_extension_point Object ( [name:rex_extension_point:private] => ART_SLICE_MENU [subject:rex_extension_point:private] => Array ( ) [params:rex_extension_point:private] => Array ( [article_id] => 1 [clang] => 1 [ctype] => 1 [module_id] => 1 [slice_id] => 2 [perm] => 1 ) [extensionParams:rex_extension_point:private] => Array ( ) [readonly:rex_extension_point:private] => )
-
-    if(rex_request('clang','string') !== '')
-      $params->clang = rex_request('clang');
-    if(rex_request('ctype','string') !== '')
-      $params->ctype = rex_request('ctype');
+    // print_r($ep);
 
     $Icons = array(
       array(
         'hidden_label' => rex_i18n::msg('slice_ui_copy'),
         'url' => 'index.php?page=content/copy&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
         'attributes' => array(
-          'class' => array('btn btn-copy'),
+          'class' => array('btn-copy'),
           'title' =>rex_i18n::msg('slice_ui_copy'),
           'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_copied')
         ),
@@ -27,7 +22,7 @@ class slice_ui {
         'hidden_label' => rex_i18n::msg('slice_ui_cut'),
         'url' => 'index.php?page=content/cut&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
         'attributes' => array(
-          'class' => array('btn btn-cut'),
+          'class' => array('btn-cut'),
           'title' => rex_i18n::msg('slice_ui_cut'),
           'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_cutted')
         ),
@@ -50,7 +45,7 @@ class slice_ui {
         'hidden_label' => rex_i18n::msg('slice_ui_paste'),
         'url' => 'index.php?page=content/pasteAfter&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
         'attributes' => array(
-          'class' => array('btn btn-paste'),
+          'class' => array('btn-paste'),
           'title' => rex_i18n::msg('slice_ui_paste'),
           'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_pasted')
         ),
@@ -72,12 +67,23 @@ class slice_ui {
       'hidden_label' => rex_i18n::msg('slice_ui_toggle_'.$mode),
       'url' => 'index.php?page=content/toggleSlice&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype').'&visible='.$sql->getValue('active'),
       'attributes' => array(
-        'class' => array('btn btn-'.$mode),
+        'class' => array('btn-'.$mode),
         'title' => rex_i18n::msg('slice_ui_toggle_'.$mode),
-        'data-pjax-container' => '#rex-js-page-container',
         'data-title-online' => rex_i18n::msg('slice_ui_slice_toggled')
       ),
       'icon' => $mode,
+    );
+
+    $Icons[] = array(
+      'hidden_label' => rex_i18n::msg('slice_ui_move'),
+      'url' => 'index.php?page=content/move&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
+      'attributes' => array(
+        'class' => array('btn-move-up-n-down hide'),
+        'title' => rex_i18n::msg('slice_ui_toggle_move'),
+        'data-prio' => '',
+        'data-title-online' => rex_i18n::msg('slice_ui_slice_moved')
+      ),
+      'icon' => 'move-up-n-down',
     );
 
     return $Icons;
@@ -93,42 +99,6 @@ class slice_ui {
     if($sql->getValue('active') == 1 || rex::isBackend())
       return $ep->content;
     return '';
-  }
-
-  public static function regenerateArticle($slice_id = false,$clang = false,$module_id = false) {
-    if(!$slice_id) $slice_id = rex_get('slice_id');
-    if(!$article_id) $article_id = rex_get('article_id');
-    if(!$clang) $clang = rex_get('clang');
-    if(!$module_id) $module_id = rex_get('module_id');
-    if(!$ctype) $ctype = rex_get('ctype');
-
-    $newsql = rex_sql::factory();
-    $action = new rex_article_action($module_id, $function, $newsql);
-    $action->setRequestValues();
-    $action->exec(rex_article_action::PRESAVE);
-
-    // ----- artikel neu generieren
-    $EA = rex_sql::factory();
-    $EA->setTable(rex::getTablePrefix() . 'article');
-    $EA->setWhere(['id' => $article_id, 'clang_id' => $clang]);
-    $EA->addGlobalUpdateFields();
-    $EA->update();
-    rex_article_cache::delete($article_id, $clang);
-
-    rex_extension::registerPoint(new rex_extension_point('ART_CONTENT_UPDATED', '', [
-      'id' => $article_id,
-      'clang' => $clang,
-    ]));
-
-    // ----- POST SAVE ACTION [ADD/EDIT/DELETE]
-    $action->exec(rex_article_action::POSTSAVE);
-    if ($messages = $action->getMessages()) {
-      $info .= '<br />' . implode('<br />', $messages);
-    }
-
-    if (rex_post('btn_save', 'string')) {
-      $function = '';
-    }
   }
 
   public static function copySlice($slice_id = false,$clang = false,$module_id = false) {
@@ -183,6 +153,33 @@ class slice_ui {
     while (@ob_end_clean());
     header("Location: ".rex_url::backendController().'?page=content/edit&article_id='.rex_get('article_id').'&clang='.rex_get('clang').'&ctype='.rex_get('ctype'));
     exit;
+  }
+
+  public function moveSlice() {
+    $slice_id = rex_get('slice_id');
+    $article_id = rex_get('article_id');
+    $clang = rex_get('clang');
+    $module_id = rex_get('module_id');
+    $ctype = rex_get('ctype');
+    $prio = rex_get('prio');
+    $dir = rex_get('dir');
+
+    $sql = rex_sql::factory();
+    $sql->setQuery("UPDATE ".rex::getTablePrefix().'article_slice'." SET priority = ? WHERE id = ?",array($prio,$slice_id));
+
+    $sort = 'DESC';
+    if($dir == 1)
+      $sort = 'ASC';
+    rex_sql_util::organizePriorities(
+      rex::getTable('article_slice'),
+      'priority',
+      'article_id='.$article_id.' AND clang_id='.$clang.' AND ctype_id='.$ctype.' AND revision=0',
+      'priority, updatedate '.$sort
+    );
+
+    // self::regenerateArticle();
+    echo 'Reset: Priority: '.$prio.' Slice: '.$slice_id;
+    exit();
   }
 
   public static function addSlice() {
@@ -341,6 +338,42 @@ class slice_ui {
       }
     }
     return true;
+  }
+
+  public static function regenerateArticle($slice_id = false,$clang = false,$module_id = false) {
+    if(!$slice_id) $slice_id = rex_get('slice_id');
+    if(!$article_id) $article_id = rex_get('article_id');
+    if(!$clang) $clang = rex_get('clang');
+    if(!$module_id) $module_id = rex_get('module_id');
+    if(!$ctype) $ctype = rex_get('ctype');
+
+    $newsql = rex_sql::factory();
+    $action = new rex_article_action($module_id, $function, $newsql);
+    $action->setRequestValues();
+    $action->exec(rex_article_action::PRESAVE);
+
+    // ----- artikel neu generieren
+    $EA = rex_sql::factory();
+    $EA->setTable(rex::getTablePrefix() . 'article');
+    $EA->setWhere(['id' => $article_id, 'clang_id' => $clang]);
+    $EA->addGlobalUpdateFields();
+    $EA->update();
+    rex_article_cache::delete($article_id, $clang);
+
+    rex_extension::registerPoint(new rex_extension_point('ART_CONTENT_UPDATED', '', [
+      'id' => $article_id,
+      'clang' => $clang,
+    ]));
+
+    // ----- POST SAVE ACTION [ADD/EDIT/DELETE]
+    $action->exec(rex_article_action::POSTSAVE);
+    if ($messages = $action->getMessages()) {
+      $info .= '<br />' . implode('<br />', $messages);
+    }
+
+    if (rex_post('btn_save', 'string')) {
+      $function = '';
+    }
   }
 }
 

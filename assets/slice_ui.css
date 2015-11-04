@@ -1,10 +1,16 @@
+.noSelect {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .slice_ui img {
   width: 16px;
   height: auto;
   display: inline-block;
   vertical-align: middle;
 }
-
 .btn-copy {
   color: #fff;
   background: #3bb594;
@@ -25,7 +31,8 @@
 .btn-copy,
 .btn-paste,
 .btn-visible,
-.btn-invisible {
+.btn-invisible,
+.btn-move-up-n-down {
   color: #000;
   background: #fff;
   border-color: #ccc;
@@ -34,7 +41,8 @@
 .btn-copy:hover,
 .btn-paste:hover,
 .btn-visible:hover,
-.btn-invisible:hover {
+.btn-invisible:hover,
+.btn-move-up-n-down:hover {
   color: #000;
   background: #e6e6e6;
   border-color: #adadad;
@@ -56,6 +64,10 @@
 .fa-emptyclip:before,
 .rex-icon-emptyclip:before {
   content: "\f127";
+}
+.fa-move-up-n-down:before,
+.rex-icon-move-up-n-down:before {
+  content: "\f0dc";
 }
 
 .fa-visible:before,

@@ -11,9 +11,14 @@ if(strpos(rex_request('page'),'content/emptyclipboard') !== false)
   slice_ui::emptyClipboard();
 
 rex_view::addCssFile($this->getAssetsUrl('slice_ui.css'));
+rex_view::addJsFile($this->getAssetsUrl('slice_ui.js'));
 
 if(strpos(rex_request('page'),'content/paste') !== false)
   slice_ui::addSlice();
+
+
+if(strpos(rex_request('page'),'content/move') !== false)
+  slice_ui::moveSlice();
 
 if(strpos(rex_request('page'),'content/toggleSlice') !== false)
   slice_ui::toggleSlice();
