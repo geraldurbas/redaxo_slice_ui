@@ -56,6 +56,8 @@ Die Option `Slice-Buttons sollen mit-scrollen` lädt ein Javascript welches die 
 
 Slices können mit dieser Option für einen bestimmten Zeitrahmen aktiviert werden.
 
+![Neue Butons](/../assets/online_offline.png?raw=true)
+
 ##Extension points
 
 Diese Extension points sind eingebaut, aber noch nicht getestet.
