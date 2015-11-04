@@ -36,8 +36,11 @@ if(is_object(rex::getUser()) && (rex_request('page','string') === 'content/copy'
 rex_extension::register('SLICE_SHOW','slice_ui::addOnlineForm');
 rex_extension::register('SLICE_SHOW','slice_ui::isActive');
 
+
+$Config = rex_config::get('slice_ui');
+
 /* Slice-Menü überschreiben */
-if(!empty($_SESSION['slice_ui'])) {
+if(!empty($_SESSION['slice_ui']) && !empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
   $Content = rex_plugin::get('structure','content');
   $ContentPages = $Content->getProperty('pages');
   $ContentPages['content']['subpages']['paste'] = array(

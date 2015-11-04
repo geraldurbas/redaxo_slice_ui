@@ -49,8 +49,6 @@ Wird ausgeführt, wenn ein Slice aktiviert bzw. deaktiviert wird.
 ##Features
 
 - Slice-Groups damit eine Gruppe Slices kopiert und verschoben werden kann.
-- Drag and Drop Sortierung
-- MoveUp/Down in dieses Addon integrieren
 - Viele Buttons ggf. in ein Dropdown stecken
 - STRG/CMD + Klick editiert den Slice
 - STRG/CMD + C kopiert einen Slice

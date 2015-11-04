@@ -20,14 +20,52 @@ if(rex_post('btn_save', 'string') != '') {
   $message = $this->i18n('config_saved_successful');
 }
 
-$Values = $this->getConfig('online_from_to');
 
 $sql = rex_sql::factory();
 $modules = $sql->getArray("SELECT id,name FROM ".rex::getTablePrefix()."module");
 
 $sections = '';
 
+$Values = $this->getConfig('general');
+
 /* GENERAL */
+$content = '';
+$fragment = new rex_fragment();
+$fragment->setVar('name', 'slice_ui[general][copy_n_cut]', false);
+$fragment->setVar('checked', (!empty($Values['copy_n_cut']) && $Values['copy_n_cut'] == '1'?true:false), false);
+$fragment->setVar('label', rex_i18n::msg('slice_ui_copy_n_cut'), false);
+$content .= $fragment->parse('form/checkbox.php');
+
+$fragment = new rex_fragment();
+$fragment->setVar('name', 'slice_ui[general][drag_n_drop]', false);
+$fragment->setVar('checked', (!empty($Values['drag_n_drop']) && $Values['drag_n_drop'] == '1'?true:false), false);
+$fragment->setVar('label', rex_i18n::msg('slice_ui_drag_n_drop'), false);
+$content .= $fragment->parse('form/checkbox.php');
+
+$fragment = new rex_fragment();
+$fragment->setVar('name', 'slice_ui[general][slice_status]', false);
+$fragment->setVar('checked', (!empty($Values['slice_status']) && $Values['slice_status'] == '1'?true:false), false);
+$fragment->setVar('label', rex_i18n::msg('slice_ui_slice_status'), false);
+$content .= $fragment->parse('form/checkbox.php');
+
+$fragment = new rex_fragment();
+$fragment->setVar('name', 'slice_ui[general][keep_move_arrows]', false);
+$fragment->setVar('checked', (!empty($Values['keep_move_arrows']) && $Values['keep_move_arrows'] == '1'?true:false), false);
+$fragment->setVar('label', rex_i18n::msg('slice_ui_keep_move_arrows'), false);
+$content .= $fragment->parse('form/checkbox.php');
+
+$fragment = new rex_fragment();
+$fragment->setVar('class', 'edit', false);
+$fragment->setVar('title', rex_i18n::msg('slice_ui_general'));
+$fragment->setVar('body', $content, false);
+$sections .= $fragment->parse('core/page/section.php');
+$content = '';
+
+
+
+$Values = $this->getConfig('online_from_to');
+
+/* Online from/to form */
 $content = '';
 $fragment = new rex_fragment();
 $fragment->setVar('toggleFields','.online_from_to',false);

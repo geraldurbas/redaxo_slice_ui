@@ -14,6 +14,10 @@ slice_ui_online_from_to_title = Online von/bis
 slice_ui_config = Moduleinstellungen
 slice_ui_configfile_update = Einstellungen erfolgreich gespeichert
 
+slice_ui_copy_n_cut = Kopieren/Ausschneiden aktivieren
+slice_ui_drag_n_drop = Slices sortieren mit Drag&Drop
+slice_ui_slice_status = Online/Offline-Icon hinzufügen
+slice_ui_keep_move_arrows = Slice hoch/runter bewegen beibehalten
 slice_ui_online_from_to = Online von/bis für alle Module verfügbar
 
 

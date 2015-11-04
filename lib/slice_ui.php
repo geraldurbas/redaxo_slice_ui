@@ -4,53 +4,56 @@ class slice_ui {
 
   public static function modifySliceEditMenu(rex_extension_point $ep) {
 
+    $Config = rex_config::get('slice_ui');
     // rex_extension_point Object ( [name:rex_extension_point:private] => ART_SLICE_MENU [subject:rex_extension_point:private] => Array ( ) [params:rex_extension_point:private] => Array ( [article_id] => 1 [clang] => 1 [ctype] => 1 [module_id] => 1 [slice_id] => 1 [perm] => 1 ) [extensionParams:rex_extension_point:private] => Array ( ) [readonly:rex_extension_point:private] => ) rex_extension_point Object ( [name:rex_extension_point:private] => ART_SLICE_MENU [subject:rex_extension_point:private] => Array ( ) [params:rex_extension_point:private] => Array ( [article_id] => 1 [clang] => 1 [ctype] => 1 [module_id] => 1 [slice_id] => 2 [perm] => 1 ) [extensionParams:rex_extension_point:private] => Array ( ) [readonly:rex_extension_point:private] => )
     // print_r($ep);
 
-    $Icons = array(
-      array(
-        'hidden_label' => rex_i18n::msg('slice_ui_copy'),
-        'url' => 'index.php?page=content/copy&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
-        'attributes' => array(
-          'class' => array('btn-copy'),
-          'title' =>rex_i18n::msg('slice_ui_copy'),
-          'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_copied')
+    if(!empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
+      $Icons = array(
+        array(
+          'hidden_label' => rex_i18n::msg('slice_ui_copy'),
+          'url' => 'index.php?page=content/copy&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
+          'attributes' => array(
+            'class' => array('btn-copy'),
+            'title' =>rex_i18n::msg('slice_ui_copy'),
+            'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_copied')
+          ),
+          'icon' => 'copy'
         ),
-        'icon' => 'copy'
-      ),
-      array(
-        'hidden_label' => rex_i18n::msg('slice_ui_cut'),
-        'url' => 'index.php?page=content/cut&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
-        'attributes' => array(
-          'class' => array('btn-cut'),
-          'title' => rex_i18n::msg('slice_ui_cut'),
-          'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_cutted')
+        array(
+          'hidden_label' => rex_i18n::msg('slice_ui_cut'),
+          'url' => 'index.php?page=content/cut&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
+          'attributes' => array(
+            'class' => array('btn-cut'),
+            'title' => rex_i18n::msg('slice_ui_cut'),
+            'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_cutted')
+          ),
+          'icon' => 'cut'
         ),
-        'icon' => 'cut'
-      ),
-    );
-  
-    if(!self::checkPermissions(array(
-      'article_id' => $ep->getParam('article_id'),
-      'clang' => $ep->getParam('clang'),
-      'ctype' => $ep->getParam('ctype'),
-      'module_id' => $ep->getParam('module_id')
-    ))) unset($Icons); // Einfügen soll möglich bleiben
-
-    if($_SESSION['slice_ui']['slice_id'] === $ep->getParam('slice_id') && $_SESSION['slice_ui']['cut'] === true)
-      unset($Icons[0]);
-
-    if(!empty($_SESSION['slice_ui']['slice_id']) && $_SESSION['slice_ui']['slice_id'] !== $ep->getParam('slice_id') || ($_SESSION['slice_ui']['slice_id'] === $ep->getParam('slice_id') && $_SESSION['slice_ui']['cut'] !== true)) {
-      $Icons[0] = array(
-        'hidden_label' => rex_i18n::msg('slice_ui_paste'),
-        'url' => 'index.php?page=content/pasteAfter&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
-        'attributes' => array(
-          'class' => array('btn-paste'),
-          'title' => rex_i18n::msg('slice_ui_paste'),
-          'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_pasted')
-        ),
-        'icon' => 'paste',
       );
+  
+      if(!self::checkPermissions(array(
+        'article_id' => $ep->getParam('article_id'),
+        'clang' => $ep->getParam('clang'),
+        'ctype' => $ep->getParam('ctype'),
+        'module_id' => $ep->getParam('module_id')
+      ))) unset($Icons); // Einfügen soll möglich bleiben
+
+      if($_SESSION['slice_ui']['slice_id'] === $ep->getParam('slice_id') && $_SESSION['slice_ui']['cut'] === true)
+        unset($Icons[0]);
+
+      if(!empty($_SESSION['slice_ui']['slice_id']) && $_SESSION['slice_ui']['slice_id'] !== $ep->getParam('slice_id') || ($_SESSION['slice_ui']['slice_id'] === $ep->getParam('slice_id') && $_SESSION['slice_ui']['cut'] !== true)) {
+        $Icons[0] = array(
+          'hidden_label' => rex_i18n::msg('slice_ui_paste'),
+          'url' => 'index.php?page=content/pasteAfter&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
+          'attributes' => array(
+            'class' => array('btn-paste'),
+            'title' => rex_i18n::msg('slice_ui_paste'),
+            'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_pasted')
+          ),
+          'icon' => 'paste',
+        );
+      }
     }
 
 
@@ -63,28 +66,32 @@ class slice_ui {
     if($sql->getValue('active') == 0)
       $mode = 'invisible';
 
-    $Icons[] = array(
-      'hidden_label' => rex_i18n::msg('slice_ui_toggle_'.$mode),
-      'url' => 'index.php?page=content/toggleSlice&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype').'&visible='.$sql->getValue('active'),
-      'attributes' => array(
-        'class' => array('btn-'.$mode),
-        'title' => rex_i18n::msg('slice_ui_toggle_'.$mode),
-        'data-title-online' => rex_i18n::msg('slice_ui_slice_toggled')
-      ),
-      'icon' => $mode,
-    );
+    if(!empty($Config['general']['slice_status']) && $Config['general']['slice_status']) {
+      $Icons[] = array(
+        'hidden_label' => rex_i18n::msg('slice_ui_toggle_'.$mode),
+        'url' => 'index.php?page=content/toggleSlice&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype').'&visible='.$sql->getValue('active'),
+        'attributes' => array(
+          'class' => array('btn-'.$mode),
+          'title' => rex_i18n::msg('slice_ui_toggle_'.$mode),
+          'data-title-online' => rex_i18n::msg('slice_ui_slice_toggled')
+        ),
+        'icon' => $mode,
+      );
+    }
 
-    $Icons[] = array(
-      'hidden_label' => rex_i18n::msg('slice_ui_move'),
-      'url' => 'index.php?page=content/move&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
-      'attributes' => array(
-        'class' => array('btn-move-up-n-down hide'),
-        'title' => rex_i18n::msg('slice_ui_toggle_move'),
-        'data-prio' => '',
-        'data-title-online' => rex_i18n::msg('slice_ui_slice_moved')
-      ),
-      'icon' => 'move-up-n-down',
-    );
+    if(!empty($Config['general']['drag_n_drop']) && $Config['general']['drag_n_drop']) {
+      $Icons[] = array(
+        'hidden_label' => rex_i18n::msg('slice_ui_move'),
+        'url' => 'index.php?page=content/move&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
+        'attributes' => array(
+          'class' => array('btn-move-up-n-down','hide',!empty($Config['general']['keep_move_arrows']) && $Config['general']['keep_move_arrows']?'keep_arrows':'remove_arrows'),
+          'title' => rex_i18n::msg('slice_ui_toggle_move'),
+          'data-prio' => '',
+          'data-title-online' => rex_i18n::msg('slice_ui_slice_moved')
+        ),
+        'icon' => 'move-up-n-down',
+      );
+    }
 
     return $Icons;
   }
@@ -93,7 +100,7 @@ class slice_ui {
     $Config = rex_config::get('slice_ui');
 
     $Subject = $ep->getSubject();
-    if(rex::isBackend() && (empty($Config['online_from_to']) || in_array($ep->getParam('module_id'),$Config['online_from_to']) || in_array('all',$Config['online_from_to']))) {
+    if(rex::isBackend() && !empty($Config['online_from_to']) && (in_array($ep->getParam('module_id'),$Config['online_from_to']) || in_array('all',$Config['online_from_to']))) {
       $article_id = rex_get('article_id');
       $clang = rex_get('clang');
       $ctype = rex_get('ctype');

@@ -27,7 +27,9 @@ $(function(){
 
   if($.ui !== undefined) {
     /* Remove buttons if javascript is enabled, we don't need'em */
-    $('.rex-icon-up,.rex-icon-down').parents('.btn-group').remove();
+    if($('.btn-move-up-n-down').is('.remove_arrows'))
+      $('.rex-icon-up,.rex-icon-down').parents('.btn-group').remove();
+    
     $('.rex-main-content > .rex-slices').sortable({
       axis: 'y',
       scroll: true,
