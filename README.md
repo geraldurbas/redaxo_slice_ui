@@ -90,6 +90,12 @@ Fügt Inhalte an das Ende des Online/Offline Formulars ein.
 
 Fügt einen Footer nach einem Slice ein.
 
+##Plugins
+
+###Slice Footer
+
+Slice Footer unterstützt in der Initialversion lediglich die "Alle Slices löschen" und "Alle ausgewählten Slices löschen". Jeder Slice erhält einen Footer mit erstmals einem Icon für die "Alle ausgewählten Slices löschen"-Funktion.
+
 ##Features
 
 - Slice-Groups damit eine Gruppe Slices kopiert und verschoben werden kann.
@@ -97,6 +103,7 @@ Fügt einen Footer nach einem Slice ein.
 - STRG/CMD + Klick editiert den Slice
 - STRG/CMD + C kopiert einen Slice
 - STRG/CMD + V fügt den Slice am Anfang eines Artikels ein
+
 
 ###Article UI
 
