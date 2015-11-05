@@ -2,6 +2,20 @@
 
 Slice UI erweitert Slices um weitere Funktionen wie kopieren, ausschneiden und aktivieren bzw. deaktivieren.
 
+##Features
+
+- Move Up/Down ohne reload
+- Online/Offline ohne reload
+- Slices sortieren mit Drag&Drop
+- Online von / bis
+- Alle Slices löschen / Gewählte Slices löschen
+- Slice-Buttons scrollen mit
+- Slices kopieren
+- Slices ausschneiden
+- Fast alles optional
+- Auf bestimmte Module beschränken
+- Einige neue Extension Points für Entwickler
+
 ##Funktionen
 
 ###Kopieren, Ausschneiden
