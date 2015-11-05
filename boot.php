@@ -19,7 +19,8 @@ if(rex::isBackend()) {
   rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.js'));
 }
 
-rex_extension::register('SLICE_SHOW','slice_ui::extendBackendSlices');
+if(rex_get('function') == '')
+  rex_extension::register('SLICE_SHOW','slice_ui::extendBackendSlices');
 rex_extension::register('SLICE_SHOW','slice_ui::isActive');
 
 if(strpos(rex_request('page'),'content/emptyclipboard') !== false)
