@@ -133,11 +133,13 @@ class slice_ui {
     if($strContent)
       $content .= $strContent;
 
-    $fragment = new rex_fragment();
-    $fragment->setVar('action', 'index.php?page=content/status&article_id='.$article_id.'&clang='.$clang.'&ctype='.$clang, false);
-    $fragment->setVar('slice_id', $ep->getParam('slice_id'), false);
-    $fragment->setVar('body', $content, false);
-    $content = $fragment->parse('status/slice_form.php');
+    if($content) {
+      $fragment = new rex_fragment();
+      $fragment->setVar('action', 'index.php?page=content/status&article_id='.$article_id.'&clang='.$clang.'&ctype='.$clang, false);
+      $fragment->setVar('slice_id', $ep->getParam('slice_id'), false);
+      $fragment->setVar('body', $content, false);
+      $content = $fragment->parse('status/slice_form.php');
+    }
 
     $strContent = rex_extension::registerPoint(new rex_extension_point('ADD_AFTER_SLICE_FORMS', '', [
       'slice_id' => $ep->getParam('slice_id'),
