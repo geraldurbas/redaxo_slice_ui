@@ -72,6 +72,7 @@ class slice_ui {
         'attributes' => array(
           'class' => array('btn-'.$mode),
           'title' => rex_i18n::msg('slice_ui_toggle_'.$mode),
+          'data-state' => $mode,
           'data-title-online' => rex_i18n::msg('slice_ui_slice_toggled')
         ),
         'icon' => $mode,
