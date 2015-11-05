@@ -21,6 +21,12 @@ function deleteSlices(el,url) {
 $(function(){
   var $buttons = $('.slice_footer button');
 
+  $('input.sliceset').change(function(){
+    if($('input.sliceset:checked').length > 0)
+      $('.delete-choosen').fadeIn();
+    else $('.delete-choosen').fadeOut();
+  });
+
   $buttons.click(function(){
     var $button = $(this),
         IDs = [],
