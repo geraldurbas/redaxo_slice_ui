@@ -52,12 +52,29 @@ $(function(){
   });
 
   $('.btn-move:has(.rex-icon-down)').click(function(e){
-      moveSlice($(this),'down');
+    moveSlice($(this),'down');
     e.preventDefault();
   });
   $('.btn-move:has(.rex-icon-up)').click(function(e){
-      moveSlice($(this),'up');
+    moveSlice($(this),'up');
     e.preventDefault();
+  });
+
+  $('.btn.btn-delete').unbind().data('confirm','').click(function(e){
+    var parents = $(this).parents('.rex-slice'),
+        check = confirm('Block löschen?');
+    if(check) {
+      parents.prev().animate({height:'toggle',margin:'toggle',opacity:'toggle'},400,function(){
+        $(this).remove();
+      });
+      parents.animate({height:'toggle',margin:'toggle',opacity:'toggle'},400,function(){
+        $(this).remove();
+      });
+
+      $.ajax({url:this.href});
+    }
+    e.preventDefault();
+    return false;
   });
 
   $('.btn-visible,.btn-invisible').click(function(e) {
