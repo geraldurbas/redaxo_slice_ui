@@ -1,1 +1,0 @@
-<input class="sliceset" type="checkbox" name="sliceset[]" value="<?php echo $this->getVar('slice_id');?>">

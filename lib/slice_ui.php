@@ -56,7 +56,6 @@ class slice_ui {
       }
     }
 
-
     $sql = rex_sql::factory();
     $sql->setTable(rex::getTablePrefix().'article_slice');
     $sql->setWhere(array('id'=>$ep->getParam('slice_id')));
@@ -96,7 +95,7 @@ class slice_ui {
     return $Icons;
   }
 
-  public static function addOnlineForm(rex_extension_point $ep) {
+  public static function extendBackendSlices(rex_extension_point $ep) {
     $Config = rex_config::get('slice_ui');
 
     $article_id = rex_get('article_id');
@@ -451,6 +450,25 @@ class slice_ui {
     return true;
   }
 
+  public function extendSliceButtons() {
+    // ----- EXTENSION POINT
+    $hideButtons = rex_extension::registerPoint(new rex_extension_point('HIDE_COPY_BUTTONS', '', []));
+
+    if(!$hideButtons && (rex_get('page_buttons') == '' || strpos(rex_get('page_buttons'),__CLASS__) !== false)) {
+      $Content = rex_plugin::get('structure','content');
+      $ContentPages = $Content->getProperty('pages');
+      $ContentPages['content']['subpages']['paste'] = array(
+        'title'=>'Einfügen',
+        'icon'=>'rex-icon rex-icon-paste',
+      );
+      $ContentPages['content']['subpages']['emptyclipboard'] = array(
+        'title'=>'Clipboard löschen',
+        'icon'=>'rex-icon rex-icon-emptyclipboard',
+      );
+      $Content->setProperty('pages',$ContentPages);
+    }
+  }
+
   public static function regenerateArticle($slice_id = false,$clang = false,$module_id = false,$ctype = false,$article_id = false) {
     if(!$slice_id) $slice_id = rex_get('slice_id');
     if(!$article_id) $article_id = rex_get('article_id');
@@ -465,11 +483,6 @@ class slice_ui {
     $EA->addGlobalUpdateFields();
     $EA->update();
     rex_article_cache::delete($article_id, $clang);
-
-    rex_extension::registerPoint(new rex_extension_point('ART_CONTENT_UPDATED', '', [
-      'id' => $article_id,
-      'clang' => $clang,
-    ]));
 
     if (rex_post('btn_save', 'string')) {
       $function = '';

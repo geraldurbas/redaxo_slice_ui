@@ -1,4 +1,4 @@
-package: slice_ui/edit_all_slices
+package: slice_ui/slice_footer
 version: '1.0.0'
 author: Sascha Weidner
 supportpage: www.factorylabs.com

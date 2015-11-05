@@ -19,7 +19,7 @@ if(rex::isBackend()) {
   rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.js'));
 }
 
-rex_extension::register('SLICE_SHOW','slice_ui::addOnlineForm');
+rex_extension::register('SLICE_SHOW','slice_ui::extendBackendSlices');
 rex_extension::register('SLICE_SHOW','slice_ui::isActive');
 
 if(strpos(rex_request('page'),'content/emptyclipboard') !== false)
@@ -47,15 +47,5 @@ if(is_object(rex::getUser()) && (rex_request('page','string') === 'content/copy'
 
 /* Slice-Menü überschreiben */
 if(!empty($_SESSION['slice_ui']['slice_id']) && !empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
-  $Content = rex_plugin::get('structure','content');
-  $ContentPages = $Content->getProperty('pages');
-  $ContentPages['content']['subpages']['paste'] = array(
-    'title'=>'Einfügen',
-    'icon'=>'rex-icon rex-icon-paste',
-  );
-  $ContentPages['content']['subpages']['emptyclipboard'] = array(
-    'title'=>'Clipboard löschen',
-    'icon'=>'rex-icon rex-icon-emptyclipboard',
-  );
-  $Content->setProperty('pages',$ContentPages);
+  slice_ui::extendSliceButtons();
 }
