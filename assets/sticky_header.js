@@ -13,7 +13,9 @@
   $(window).scroll(sliceScroll).resize(sliceResize);
 
   $(function(){
-    navTop = $('.rex-main-content .rex-page-nav').offset().top;
-    sliceResize();
+    if($('.rex-main-content .rex-page-nav').length > 0) {
+      navTop = $('.rex-main-content .rex-page-nav').offset().top;
+      sliceResize();
+    }
   });
 })(jQuery);
