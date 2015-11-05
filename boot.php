@@ -11,14 +11,20 @@ if(rex::isBackend() && is_object(rex::getUser())) {
   rex_perm::register('slice_ui[settings]', null, rex_perm::OPTIONS);
 }
 
+if(rex::isBackend()) {
+  rex_view::addCssFile($this->getAssetsUrl('slice_ui.css'));
+  rex_view::addCssFile($this->getAssetsUrl('jquery-ui.datepicker.css'));
+
+  rex_view::addJsFile($this->getAssetsUrl('slice_ui.js'));
+  rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.js'));
+}
+
+rex_extension::register('SLICE_SHOW','slice_ui::addOnlineForm');
+rex_extension::register('SLICE_SHOW','slice_ui::isActive');
+
 if(strpos(rex_request('page'),'content/emptyclipboard') !== false)
   slice_ui::emptyClipboard();
 
-rex_view::addCssFile($this->getAssetsUrl('slice_ui.css'));
-rex_view::addCssFile($this->getAssetsUrl('jquery-ui.datepicker.css'));
-
-rex_view::addJsFile($this->getAssetsUrl('slice_ui.js'));
-rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.js'));
 if(!empty($Config['general']['sticky_slice_nav']) && $Config['general']['sticky_slice_nav'])
 rex_view::addJsFile($this->getAssetsUrl('sticky_header.js'));
 
@@ -37,9 +43,6 @@ if(is_object(rex::getUser()) && ((!rex::getUser()->hasPerm('editContentOnly[]') 
 
 if(is_object(rex::getUser()) && (rex_request('page','string') === 'content/copy' || rex_request('page','string') === 'content/cut'))
   slice_ui::copySlice();
-
-rex_extension::register('SLICE_SHOW','slice_ui::addOnlineForm');
-rex_extension::register('SLICE_SHOW','slice_ui::isActive');
 
 
 /* Slice-Menü überschreiben */

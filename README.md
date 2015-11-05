@@ -76,7 +76,19 @@ Wird ausgeführt, wenn ein Slice aktiviert bzw. deaktiviert wird.
 
 ####ADD_SLICE_FORMS
 
-Kann dazu verwendet werden, weitere Felder über einen Slice zu schreien. 
+Kann dazu verwendet werden, weitere Felder über einen Slice zu schreiben.
+
+####EXTEND_SLICE_FORMS
+
+Erweitert das Formular um weitere Felder.
+
+####ADD_AFTER_SLICE_FORMS
+
+Fügt Inhalte an das Ende des Online/Offline Formulars ein.
+
+####ADD_AFTER_SLICE 
+
+Fügt einen Footer nach einem Slice ein.
 
 ##Features
 
