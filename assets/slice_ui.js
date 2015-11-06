@@ -60,9 +60,9 @@ $(function(){
     e.preventDefault();
   });
 
-  $('.rex-slice-output btn.btn-delete').unbind().data('confirm','').click(function(e){
+  $('.rex-slice-output .btn.btn-delete').unbind().data('confirm','').click(function(e){
     var parents = $(this).parents('.rex-slice'),
-        check = confirm('Block löschen?');
+        check = confirm('Block wirklich löschen?');
     if(check) {
       parents.prev().animate({height:'toggle',margin:'toggle',opacity:'toggle'},400,function(){
         $(this).remove();
