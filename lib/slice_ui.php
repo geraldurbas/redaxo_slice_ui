@@ -4,9 +4,8 @@ class slice_ui {
 
   public static function modifySliceEditMenu(rex_extension_point $ep) {
 
+    $Icons = array();
     $Config = rex_config::get('slice_ui');
-    // rex_extension_point Object ( [name:rex_extension_point:private] => ART_SLICE_MENU [subject:rex_extension_point:private] => Array ( ) [params:rex_extension_point:private] => Array ( [article_id] => 1 [clang] => 1 [ctype] => 1 [module_id] => 1 [slice_id] => 1 [perm] => 1 ) [extensionParams:rex_extension_point:private] => Array ( ) [readonly:rex_extension_point:private] => ) rex_extension_point Object ( [name:rex_extension_point:private] => ART_SLICE_MENU [subject:rex_extension_point:private] => Array ( ) [params:rex_extension_point:private] => Array ( [article_id] => 1 [clang] => 1 [ctype] => 1 [module_id] => 1 [slice_id] => 2 [perm] => 1 ) [extensionParams:rex_extension_point:private] => Array ( ) [readonly:rex_extension_point:private] => )
-    // print_r($ep);
 
     if(!empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
       $Icons = array(
@@ -184,7 +183,11 @@ class slice_ui {
 
     if(rex::isBackend() ||
       ($sql->getValue('active') == 1 && (empty($online_from) || (!empty($online_from) && $online_from < time())) && (empty($online_to) || (!empty($online_to) && $online_to >= time())))
-    ) return $ep->getSubject();
+    ) {
+      $Subject = $ep->getSubject();
+      if($sql->getValue('active') != 1) $Subject = str_replace('rex-slice-output','rex-slice-output inactive',$Subject);
+      return $Subject;
+    }
     return '';
   }
 
@@ -328,15 +331,33 @@ class slice_ui {
 
     if (strpos($function,'content/paste') !== false && !empty($_SESSION['slice_ui'])) {
       // determine priority value to get the new slice into the right order
+
+      $prevSlice = rex_sql::factory();
+      $prevSlice->setTable($sliceTable);
+      $prevSlice->setWhere(array('id'=>rex_get('slice_id')));
+      $prevSlice->select();
+
       $priority = '0';
       // $prevSlice->setDebug();
       if ($function === 'content/paste') {
         $priority = 1;
       } else {
-        $prevSlice = rex_sql::factory();
-        $prevSlice->setQuery('SELECT * FROM '.$sliceTable.' WHERE id='.rex_get('slice_id'));
         $priority = $prevSlice->getValue('priority')+1;
       }
+
+      $exclude = array('id','createdate','updatedate','createuser','updateuser','priority');
+
+      // print_r($prevSlice->getRow());
+      foreach($prevSlice->getRow() as $key => $value) {
+        if(empty($value)) continue;
+        $field = end((explode('.',$key)));
+        if(in_array($field,$exclude)) continue;
+        $newsql->setValue($field,$value);
+      }
+
+      // die();
+
+      // foreach($prevSlice->getRow())
 
 
       $newsql->setValue('article_id', $article_id);
@@ -398,8 +419,9 @@ class slice_ui {
         }
 
       } catch (rex_sql_exception $e) {
-        // echo rex_view::warning($e->getMessage());
+        echo rex_view::warning($e->getMessage());
       }
+      // die();
 
       // Alle OBs schließen
       while (@ob_end_clean());
