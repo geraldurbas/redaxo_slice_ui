@@ -60,7 +60,7 @@ $(function(){
     e.preventDefault();
   });
 
-  $('.btn.btn-delete').unbind().data('confirm','').click(function(e){
+  $('.rex-slice-output btn.btn-delete').unbind().data('confirm','').click(function(e){
     var parents = $(this).parents('.rex-slice'),
         check = confirm('Block löschen?');
     if(check) {
@@ -87,10 +87,12 @@ $(function(){
     });
 
     if(state == 'visible') {
+      $(this).parents('.rex-slice-output').addClass('inactive');
       this.className = 'btn btn-invisible';
       this.setAttribute('data-state','invisible');
       this.getElementsByTagName('i')[0].className = 'rex-icon rex-icon-invisible';
     } else {
+      $(this).parents('.rex-slice-output').removeClass('inactive');
       this.className = 'btn btn-visible';
       this.setAttribute('data-state','visible');
       this.getElementsByTagName('i')[0].className = 'rex-icon rex-icon-visible';

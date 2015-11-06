@@ -5,6 +5,10 @@
   user-select: none;
 }
 
+.rex-slice-output.inactive {
+  opacity: .7;
+}
+
 .rex-main-content .rex-page-nav .nav-tabs {
   -webkit-transition: border-color .25s;
   -o-transition: border-color .25s;
