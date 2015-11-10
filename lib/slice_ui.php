@@ -111,7 +111,6 @@ class slice_ui {
     $Subject = $ep->getSubject();
     if(rex::isBackend() && !empty($Config['online_from_to']) && (in_array($ep->getParam('module_id'),$Config['online_from_to']) || in_array('all',$Config['online_from_to']))) {
       
-
       $sql = rex_sql::factory();
       $sql->setTable(rex::getTablePrefix().'article_slice');
       $sql->setWhere(array('id'=>$ep->getParam('slice_id')));
