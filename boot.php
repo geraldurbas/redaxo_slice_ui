@@ -5,6 +5,15 @@ $Config = rex_config::get('slice_ui');
 if(empty($_SESSION['slice_ui']))
   slice_ui::emptyClipboard(1);
 
+rex_extension::register('PAGE_BODY_ATTR',function($ep) {
+  $Subject = $ep->getSubject();
+  if($_SESSION['slice_ui']['slice_id'] != 0) {
+    $Subject['class'][] = 'copy';
+  }
+  return $Subject;
+});
+
+
 if(rex::isBackend() && is_object(rex::getUser())) {
   rex_perm::register('copy[]');
   rex_perm::register('slice_ui[]', null, rex_perm::OPTIONS);
@@ -27,7 +36,7 @@ if(strpos(rex_request('page'),'content/emptyclipboard') !== false)
   slice_ui::emptyClipboard();
 
 if(!empty($Config['general']['sticky_slice_nav']) && $Config['general']['sticky_slice_nav'])
-rex_view::addJsFile($this->getAssetsUrl('sticky_header.js'));
+  rex_view::addJsFile($this->getAssetsUrl('sticky_header.js'));
 
 if(strpos(rex_request('page'),'content/paste') !== false)
   slice_ui::addSlice();
@@ -47,6 +56,9 @@ if(is_object(rex::getUser()) && (rex_request('page','string') === 'content/copy'
 
 
 /* Slice-Menü überschreiben */
-if(!empty($_SESSION['slice_ui']['slice_id']) && !empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
+if(!empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
   slice_ui::extendSliceButtons();
 }
+
+// if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+//   die();

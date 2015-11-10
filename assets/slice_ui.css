@@ -9,6 +9,15 @@
   opacity: .7;
 }
 
+.panel-default > .panel-heading {
+  -webkit-transition: background-color .25s;
+  -o-transition: background-color .25s;
+  transition: background-color .25s;
+}
+.rex-slice-output.copied .panel-default > .panel-heading {
+  background: #c9ffcf;
+}
+
 .rex-main-content .rex-page-nav .nav-tabs {
   -webkit-transition: border-color .25s;
   -o-transition: border-color .25s;
@@ -60,10 +69,14 @@
   display: inline-block;
   vertical-align: middle;
 }
-.btn-copy {
+.btn-copy,
+.btn-paste {
   color: #fff;
   background: #3bb594;
   border-color: #3bb594;
+  -webkit-transition: background-color .3s,color .3s;
+  -o-transition: background-color .3s,color .3s;
+  transition: background-color .3s,color .3s;
 }
 .btn-cut {
   color: #fff;
@@ -71,8 +84,8 @@
   border-color: #e8a800;
 }
 .btn-paste {
-  color: #fff;
-  background: #4b9ad9;
+  color: #fff !important;
+  background: #4b9ad9 !important;
   border-color: #4b9ad9;
 }
 

@@ -42,23 +42,81 @@ $(function(){
   var lastSorted = null,
       startPosition = 0;
 
+  if(!$('body').is('.copy'))
+    $('.nav.nav-tabs a:has(.rex-icon-emptyclipboard),.nav.nav-tabs a:has(.rex-icon-paste)').parent().hide();
+
+
+
   /* add button if javascript is enableb */
   $('.btn-move-up-n-down').removeClass('hide').click(function(e){
     e.preventDefault();
   });
 
+
+
   $('.panel-form input[type="text"]').datepicker({
     dateFormat: 'dd.mm.yy'
   });
 
-  $('.btn-move:has(.rex-icon-down)').click(function(e){
+
+
+  $('.rex-slice-output .btn-move:has(.rex-icon-down)').click(function(e){
     moveSlice($(this),'down');
     e.preventDefault();
   });
-  $('.btn-move:has(.rex-icon-up)').click(function(e){
+  $('.rex-slice-output .btn-move:has(.rex-icon-up)').click(function(e){
     moveSlice($(this),'up');
     e.preventDefault();
   });
+
+
+
+  $('.nav.nav-tabs a:has(.rex-icon-emptyclipboard)').click(function(e){
+    var buttons = $('.rex-slice-output .btn-paste');
+    $('.nav.nav-tabs a:has(.rex-icon-emptyclipboard),.nav.nav-tabs a:has(.rex-icon-paste)').parent().fadeOut();
+
+    $('.rex-slice-output.copied').removeClass('copied');
+    
+    $.ajax({
+      url: this.href
+    });
+
+    buttons.each(function(){
+      this.className = this.className.replace('paste','copy');
+      this.href = this.href.replace('pasteAfter','copy');
+      $(this).children('i')[0].className = $(this).children('i')[0].className.replace('paste','copy');
+    });
+
+    e.preventDefault();
+  });
+
+
+
+  $('.rex-slice-output .btn-copy,.DDDDrex-slice-output .btn-paste').click(function(e){
+
+    if(this.className.indexOf('copy') !== -1) {
+      var buttons = $('.rex-slice-output .btn-copy');
+      e.preventDefault();
+
+      if(this.className.indexOf('copy') !== -1) {
+        $.ajax({
+          url: this.href
+        });
+      }
+
+      $('.nav.nav-tabs a:has(.rex-icon-emptyclipboard),.nav.nav-tabs a:has(.rex-icon-paste)').parent().fadeIn();
+
+      buttons.each(function(){
+        this.className = this.className.replace('copy','paste');
+        this.href = this.href.replace('copy','pasteAfter');
+        $(this).children('i')[0].className = $(this).children('i')[0].className.replace('copy','paste');
+      });
+
+      $(this).parents('.rex-slice-output').addClass('copied');
+    }
+  });
+
+
 
   $('.rex-slice-output .btn.btn-delete').unbind().data('confirm','').click(function(e){
     var parents = $(this).parents('.rex-slice'),
@@ -76,6 +134,8 @@ $(function(){
     e.preventDefault();
     return false;
   });
+
+
 
   $('.btn-visible,.btn-invisible').click(function(e) {
     var state = this.getAttribute('data-state');
@@ -98,6 +158,8 @@ $(function(){
       this.getElementsByTagName('i')[0].className = 'rex-icon rex-icon-visible';
     }
   });
+
+
 
   if($.ui !== undefined) {
     /* Remove buttons if javascript is enabled, we don't need'em */

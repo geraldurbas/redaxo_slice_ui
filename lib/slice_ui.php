@@ -2,6 +2,10 @@
 
 class slice_ui {
 
+  public static function is_ajax() {
+    return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+  }
+
   public static function modifySliceEditMenu(rex_extension_point $ep) {
 
     $Icons = array();
@@ -48,6 +52,7 @@ class slice_ui {
           'attributes' => array(
             'class' => array('btn-paste'),
             'title' => rex_i18n::msg('slice_ui_paste'),
+            'data-pjax' => 'true',
             'data-title-online' => rex_i18n::msg('slice_ui_slice_ui_pasted')
           ),
           'icon' => 'paste',
@@ -186,6 +191,7 @@ class slice_ui {
     ) {
       $Subject = $ep->getSubject();
       if($sql->getValue('active') != 1) $Subject = str_replace('rex-slice-output','rex-slice-output inactive',$Subject);
+      if($_SESSION['slice_ui']['slice_id'] == $ep->getParam('slice_id')) $Subject = str_replace('rex-slice-output','rex-slice-output copied',$Subject);
       return $Subject;
     }
     return '';
@@ -198,7 +204,7 @@ class slice_ui {
     if(!$module_id) $module_id = rex_get('module_id');
     if(!$ctype) $ctype = rex_get('ctype');
 
-    $_SESSION['slice_ui'] = array('slice_id'=>$slice_id,'article_id'=>$article_id,'clang'=>$clang,'module_id'=>$module_id,'ctype'=>$ctype,'cut'=>(rex_get('page') === 'content/cut'));
+    $_SESSION['slice_ui'] = array('slice_id'=>$slice_id,'article_id'=>$article_id,'clang'=>$clang,'module_id'=>$module_id,'ctype'=>$ctype,'cut'=>(rex_get('page') === 'content/cut'),'new_slice_id'=>null);
 
     // ----- EXTENSION POINT
     rex_extension::registerPoint(new rex_extension_point('SLICE_COPIED', '', $_SESSION['slice_ui']));
@@ -210,7 +216,7 @@ class slice_ui {
   }
 
   public static function emptyClipboard($reset=false) {
-    $_SESSION['slice_ui'] = ['slice_id'=>null,'article_id'=>null,'clang'=>null,'module_id'=>null,'ctype'=>null,'cut'=>null];
+    $_SESSION['slice_ui'] = ['slice_id'=>null,'article_id'=>null,'clang'=>null,'module_id'=>null,'ctype'=>null,'cut'=>null,'new_slice_id'=>null];
 
     if($reset)
       return;
@@ -325,40 +331,36 @@ class slice_ui {
     
     $newsql = rex_sql::factory();
     // $newsql->setDebug();
-
     $sliceTable = rex::getTablePrefix().'article_slice';
     $newsql->setTable($sliceTable);
 
     if (strpos($function,'content/paste') !== false && !empty($_SESSION['slice_ui'])) {
-      // determine priority value to get the new slice into the right order
-
-      $prevSlice = rex_sql::factory();
-      $prevSlice->setTable($sliceTable);
-      $prevSlice->setWhere(array('id'=>rex_get('slice_id')));
-      $prevSlice->select();
-
       $priority = '0';
       // $prevSlice->setDebug();
       if ($function === 'content/paste') {
         $priority = 1;
       } else {
+        $prevSlice = rex_sql::factory();
+        $prevSlice->setTable($sliceTable);
+        $prevSlice->setWhere(array('id'=>rex_get('slice_id')));
+        $prevSlice->select();
         $priority = $prevSlice->getValue('priority')+1;
       }
 
+      $copiedSlice = rex_sql::factory();
+      $copiedSlice->setTable($sliceTable);
+      $copiedSlice->setWhere(array('id'=>$cut_slice_id));
+      $copiedSlice->select();
+
       $exclude = array('id','createdate','updatedate','createuser','updateuser','priority');
 
-      // print_r($prevSlice->getRow());
-      foreach($prevSlice->getRow() as $key => $value) {
+      // print_r($copiedSlice->getRow());
+      foreach($copiedSlice->getRow() as $key => $value) {
         if(empty($value)) continue;
         $field = end((explode('.',$key)));
         if(in_array($field,$exclude)) continue;
         $newsql->setValue($field,$value);
       }
-
-      // die();
-
-      // foreach($prevSlice->getRow())
-
 
       $newsql->setValue('article_id', $article_id);
       $newsql->setValue('module_id', $module_id);
@@ -375,7 +377,7 @@ class slice_ui {
 
         $slice_id = $newsql->getLastId();
         if($slice_id !== 0)
-          $_SESSION['slice_ui']['slice_id'] = $slice_id;
+          $_SESSION['slice_ui']['new_slice_id'] = $slice_id;
 
 
         rex_sql_util::organizePriorities(
