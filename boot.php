@@ -48,7 +48,7 @@ if(strpos(rex_request('page'),'content/toggleSlice') !== false || strpos(rex_req
   slice_ui::toggleSlice();
 
 if(is_object(rex::getUser()) && ((!rex::getUser()->hasPerm('editContentOnly[]') && rex::getUser()->hasPerm('slice_ui[]') || rex::getUser()->isAdmin()))) {
-  rex_extension::register('ART_SLICE_MENU','slice_ui::modifySliceEditMenu');
+  rex_extension::register('STRUCTURE_CONTENT_SLICE_MENU','slice_ui::modifySliceEditMenu');
 }
 
 if(is_object(rex::getUser()) && (rex_request('page','string') === 'content/copy' || rex_request('page','string') === 'content/cut'))

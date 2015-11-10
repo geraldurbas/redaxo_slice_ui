@@ -13,5 +13,5 @@ if(strpos(rex_request('page'),'content/editall') !== false)
 if(strpos(rex_request('page'),'content/delete') !== false)
   slice_footer::deleteSlices();
 
-rex_extension::register('PAGE_CONTENT','slice_footer::addFooterForm');
-rex_extension::register('PAGE_CONTENT_BEFORE_SLICES','slice_footer::addFooterForm');
+rex_extension::register('STRUCTURE_CONTENT_BEFORE_SLICES','slice_footer::addFooterForm');
+rex_extension::register('STRUCTURE_CONTENT_AFTER_SLICES','slice_footer::addFooterForm');
