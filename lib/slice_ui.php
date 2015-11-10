@@ -190,7 +190,7 @@ class slice_ui {
       ($sql->getValue('active') == 1 && (empty($online_from) || (!empty($online_from) && $online_from < time())) && (empty($online_to) || (!empty($online_to) && $online_to >= time())))
     ) {
       $Subject = $ep->getSubject();
-      if($sql->getValue('active') != 1) $Subject = str_replace('rex-slice-output','rex-slice-output inactive',$Subject);
+      if($sql->getValue('active') != 1 || (!empty($online_from) && $online_from > time()) || (!empty($online_to) && $online_to <= time())) $Subject = str_replace('rex-slice-output','rex-slice-output inactive',$Subject);
       if($_SESSION['slice_ui']['slice_id'] == $ep->getParam('slice_id')) $Subject = str_replace('rex-slice-output','rex-slice-output copied',$Subject);
       return $Subject;
     }
