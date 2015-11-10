@@ -43,7 +43,7 @@ class slice_ui {
       ))) unset($Icons); // Einfügen soll möglich bleiben
 
       if($_SESSION['slice_ui']['slice_id'] === $ep->getParam('slice_id') && $_SESSION['slice_ui']['cut'] === true)
-        unset($Icons[0]);
+        $Icons[0]['attributes']['style'] = 'display:none';
 
       if(!empty($_SESSION['slice_ui']['slice_id']) && $_SESSION['slice_ui']['slice_id'] !== $ep->getParam('slice_id') || ($_SESSION['slice_ui']['slice_id'] === $ep->getParam('slice_id') && $_SESSION['slice_ui']['cut'] !== true)) {
         $Icons[0] = array(

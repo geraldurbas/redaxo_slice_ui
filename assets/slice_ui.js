@@ -40,7 +40,8 @@ function moveSlice($el,dir) {
 
 $(function(){
   var lastSorted = null,
-      startPosition = 0;
+      startPosition = 0,
+      sliceCutted = false;
 
   if(!$('body').is('.copy'))
     $('.nav.nav-tabs a:has(.rex-icon-emptyclipboard),.nav.nav-tabs a:has(.rex-icon-paste)').parent().hide();
@@ -75,6 +76,7 @@ $(function(){
     var buttons = $('.rex-slice-output .btn-paste');
     $('.nav.nav-tabs a:has(.rex-icon-emptyclipboard),.nav.nav-tabs a:has(.rex-icon-paste)').parent().fadeOut();
 
+    $('.rex-slice-output .btn-copy,.rex-slice-output .btn-paste').fadeIn();
     $('.rex-slice-output.copied').removeClass('copied');
     
     $.ajax({
@@ -92,8 +94,32 @@ $(function(){
 
 
 
-  $('.rex-slice-output .btn-copy,.DDDDrex-slice-output .btn-paste').click(function(e){
 
+  $('.rex-slice-output .btn-cut').click(function(e){
+    e.preventDefault();
+    $(this).parent().children('.btn-copy').fadeOut();
+
+    var buttons = $('.rex-slice-output .btn-copy');
+      e.preventDefault();
+
+      $.ajax({
+        url: this.href
+      });
+
+      $('.nav.nav-tabs a:has(.rex-icon-emptyclipboard),.nav.nav-tabs a:has(.rex-icon-paste)').parent().fadeIn();
+
+      buttons.each(function(){
+        this.className = this.className.replace('copy','paste');
+        this.href = this.href.replace('copy','pasteAfter');
+        $(this).children('i')[0].className = $(this).children('i')[0].className.replace('copy','paste');
+      });
+
+      $(this).parents('.rex-slice-output').addClass('copied');
+  });
+
+
+
+  $('.rex-slice-output .btn-copy,.rex-slice-output .btn-paste').click(function(e){
     if(this.className.indexOf('copy') !== -1) {
       var buttons = $('.rex-slice-output .btn-copy');
       e.preventDefault();
