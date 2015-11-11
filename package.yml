@@ -1,7 +1,5 @@
-# Alle hier gesetzten Werte können über $addon->getProperty($key) abgefragt werden
-
 package: slice_ui
-version: '2.0.4'
+version: '2.1.0'
 author: Sascha Weidner
 supportpage: http://www.factorylabs.ch
 
