@@ -16,7 +16,7 @@ function updateIndex(newBlock,replace,step) {
   if(newBlock.next('[data-json]').length > 0 && !concat)
     updateIndex(newBlock.next('[data-json]'),(parseInt(replace,10)+Math.abs(step)).toString(),step);
 }
-$(function(){
+$(document).on('ready pjax:success',function(){
   var $json = $('fieldset [data-json]');
 
   $json.each(function(){

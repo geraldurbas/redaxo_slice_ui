@@ -38,7 +38,7 @@ function moveSlice($el,dir) {
   });
 }
 
-$(function(){
+$(document).on('ready pjax:success',function(){
   var lastSorted = null,
       startPosition = 0,
       sliceCutted = false;
