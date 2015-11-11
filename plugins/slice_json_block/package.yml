@@ -4,7 +4,11 @@ author: Sascha Weidner
 supportpage: www.factorylabs.com
 
 page:
-  title: 'translate:slice_json_block'
+  title: 'translate:slice_modul'
   icon: rex-icon fa-help
   perm: rex_slice[json]
   pjax: false
+  subpages:
+    index: { title: 'translate:slice_json_block' }
+    json_value: { title: 'translate:rex_json_value' }
+    generate_media: { title: 'translate:generate_media' }
