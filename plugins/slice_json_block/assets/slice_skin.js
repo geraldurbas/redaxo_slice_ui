@@ -14,7 +14,7 @@ function updateIndex(newBlock,replace,step) {
   });
 
   if(newBlock.next('[data-json]').length > 0 && !concat)
-    updateIndex(newBlock.next('[data-json]'),(parseInt(replace,10)+step).toString(),step);
+    updateIndex(newBlock.next('[data-json]'),(parseInt(replace,10)+Math.abs(step)).toString(),step);
 }
 $(function(){
   var $json = $('fieldset [data-json]');
@@ -57,6 +57,7 @@ $(function(){
 
     json.find('.btn-delete').click(function(){
       var obj = $(this).parents('[data-json]')[0],
+          parent = $(this).parents('[data-json]'),
           check = true;
 
       if($(this).data('confirm') != '')
@@ -64,9 +65,10 @@ $(function(){
 
       if(!check) return;
 
-      if($json.length > 1)
-        $(this).parents('[data-json]').remove();
-      else {
+      if($json.length > 1) {
+        updateIndex(parent.next(),parent.index().toString(),-1);
+        parent.remove();
+      } else {
         var tags = ['input','select','textarea'];
 
         for(var t=0;t<tags.length;t++) {
