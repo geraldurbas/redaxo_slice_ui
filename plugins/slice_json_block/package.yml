@@ -8,7 +8,3 @@ page:
   icon: rex-icon fa-help
   perm: rex_slice[json]
   pjax: false
-
-requires:
-  plugins:
-    lessphp: >=1.0.0

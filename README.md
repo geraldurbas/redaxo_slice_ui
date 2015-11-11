@@ -110,6 +110,12 @@ Fügt einen Footer nach einem Slice ein.
 
 Slice Footer unterstützt in der Initialversion lediglich die "Alle Slices löschen" und "Alle ausgewählten Slices löschen". Jeder Slice erhält einen Footer mit erstmals einem Icon für die "Alle ausgewählten Slices löschen"-Funktion.
 
+###Slice JSON Block
+
+Slice Json Block macht Input-Arrays komfortabel. Alle Daten in R5 die als Array gesendet werden, werden als JSON-String in die Datenbank geschrieben.
+
+Dieses Plugin liefert in den Einstellungen weitere Hilfe wie ein Block aufgebaut werden sollte. 
+
 ##Features
 
 - Slice-Groups damit eine Gruppe Slices kopiert und verschoben werden kann.
