@@ -2,3 +2,13 @@ package: slice_ui/slice_json_block
 version: '1.0.0'
 author: Sascha Weidner
 supportpage: www.factorylabs.com
+
+page:
+  title: 'translate:slice_json_block'
+  icon: rex-icon fa-help
+  perm: rex_slice[json]
+  pjax: false
+
+requires:
+  plugins:
+    lessphp: >=1.0.0
