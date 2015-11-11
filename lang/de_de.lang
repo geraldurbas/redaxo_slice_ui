@@ -6,6 +6,7 @@ slice_ui_title = Slice UI
 slice_ui_menu_link = Slice UI
 slice_ui_version = 1.0
 
+slice_ui_config_saved_successfull = Konfiguration wurde aktualisert
 
 slice_ui_settings = Einstellungen
 slice_ui_help = Hilfe

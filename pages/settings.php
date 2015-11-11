@@ -17,7 +17,7 @@ if(rex_post('btn_save', 'string') != '') {
   }
 
   $this->setConfig($pValues);
-  $message = $this->i18n('config_saved_successful');
+  $message = $this->i18n('config_saved_successfull');
 }
 
 
@@ -123,7 +123,6 @@ $fragment->setVar('options',$modules,false);
 $fragment->setVar('info',rex_i18n::msg('ctrl'),false);
 $content .= $fragment->parse('form/select.php');
 
-
 $sql = rex_sql::factory();
 $Attributes = $sql->getArray("SELECT id,name,attributes FROM ".rex::getTablePrefix()."template");
 $arrAttributes = array();
@@ -196,5 +195,6 @@ $fragment->setVar('buttons', $buttons, false);
 $sections .= $fragment->parse('core/page/section.php');
 
 ?><form action="<?php echo rex_url::currentBackendPage();?>" method="post">
+  <?php if($message) echo rex_view::success($message);?>
   <?php echo $sections;?>
 </form>
