@@ -9,6 +9,7 @@ requires:
 
 page:
     title: 'translate:title'
+    perm: slice_ui[]
     pjax: true
     icon: rex-icon rex-icon-copy
     subpages:
