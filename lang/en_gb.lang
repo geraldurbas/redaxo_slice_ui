@@ -6,6 +6,7 @@ slice_ui_title = Slice UI
 slice_ui_menu_link = Slice UI
 slice_ui_version = 1.0
 
+slice_ui_config_saved_successfull = Config successfully saved
 
 slice_ui_settings = Settings
 slice_ui_help = Help
@@ -53,8 +54,10 @@ slice_ui_moved = Slice moved
 
 
 #Permissions
-perm_general_copy[] = Slice UI
-perm_options_slice_ui[] = Copy slices
+perm_general_slice_ui[] = Slice UI
+perm_options_slice_ui[copy] = Copy slices
+perm_options_slice_ui[move] = Move slices
+perm_options_slice_ui[status] = Slices online / offline
 perm_options_slice_ui[settings] = Able to config Slice UI
 
 

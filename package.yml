@@ -9,9 +9,9 @@ requires:
 
 page:
     title: 'translate:title'
-    perm: slice_ui[]
     pjax: true
+    perm: slice_ui[]
     icon: rex-icon rex-icon-copy
     subpages:
         settings: { title: 'translate:settings', perm: slice_ui[settings]}
-        help: { title: 'translate:help' }
+        help: { title: 'translate:help'}

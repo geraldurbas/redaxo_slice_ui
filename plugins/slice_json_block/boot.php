@@ -10,4 +10,8 @@ if(!rex_plugin::exists('be_style','lessphp')) {
   rex_view::addCssFile($this->getPath().'less/styles.min.css');
 }
 
+if(rex::isBackend() && is_object(rex::getUser()))
+  rex_perm::register('slice_ui[json]', null, rex_perm::OPTIONS);
+
+
 rex_view::addJsFile($this->getAssetsUrl('slice_skin.js'));

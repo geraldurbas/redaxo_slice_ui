@@ -6,7 +6,7 @@ supportpage: www.factorylabs.com
 page:
   title: 'translate:slice_modul'
   icon: rex-icon fa-help
-  perm: rex_slice[json]
+  perm: slice_ui[json]
   pjax: false
   subpages:
     index: { title: 'translate:slice_json_block' }

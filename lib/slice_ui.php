@@ -8,10 +8,13 @@ class slice_ui {
 
   public static function modifySliceEditMenu(rex_extension_point $ep) {
 
+    if(!rex::getUser()->hasPerm('slice_ui[]'))
+      return;
+
     $Icons = array();
     $Config = rex_config::get('slice_ui');
 
-    if(!empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
+    if(!empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut'] && rex::getUser()->hasPerm('slice_ui[copy]')) {
       $Icons = array(
         array(
           'hidden_label' => rex_i18n::msg('slice_ui_copy'),
@@ -69,7 +72,7 @@ class slice_ui {
     if($sql->getValue('active') == 0)
       $mode = 'invisible';
 
-    if(!empty($Config['general']['slice_status']) && $Config['general']['slice_status']) {
+    if(!empty($Config['general']['slice_status']) && $Config['general']['slice_status'] && rex::getUser()->hasPerm('slice_ui[status]') && rex::getUser()->getComplexPerm('modules')->hasPerm($ep->getParam('module_id'))) {
       $Icons[] = array(
         'hidden_label' => rex_i18n::msg('slice_ui_toggle_'.$mode),
         'url' => 'index.php?page=content/toggleSlice&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype').'&visible='.$sql->getValue('active'),
@@ -83,7 +86,7 @@ class slice_ui {
       );
     }
 
-    if(!empty($Config['general']['drag_n_drop']) && $Config['general']['drag_n_drop']) {
+    if(!empty($Config['general']['drag_n_drop']) && $Config['general']['drag_n_drop'] && rex::getUser()->hasPerm('slice_ui[move]')) {
       $Icons[] = array(
         'hidden_label' => rex_i18n::msg('slice_ui_move'),
         'url' => 'index.php?page=content/move&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'),
@@ -461,7 +464,7 @@ class slice_ui {
 
     if(!rex_template::hasModule($template_attributes,$ep['ctype'],$ep['module_id'])) {
       return false;
-    } elseif (!(rex::getUser()->isAdmin() || rex::getUser()->hasPerm('module['.$ep['module_id'].']') || rex::getUser()->hasPerm('module[0]'))) {
+    } elseif (!(rex::getUser()->isAdmin() || rex::getUser()->getComplexPerm('modules')->hasPerm($ep['module_id']))) {
       return false;
     }
 
@@ -476,7 +479,7 @@ class slice_ui {
     return true;
   }
 
-  public function extendSliceButtons() {
+  public static function extendSliceButtons() {
     // ----- EXTENSION POINT
     $hideButtons = rex_extension::registerPoint(new rex_extension_point('HIDE_COPY_BUTTONS', '', []));
 

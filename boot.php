@@ -15,8 +15,10 @@ rex_extension::register('PAGE_BODY_ATTR',function($ep) {
 
 
 if(rex::isBackend() && is_object(rex::getUser())) {
-  rex_perm::register('copy[]');
-  rex_perm::register('slice_ui[]', null, rex_perm::OPTIONS);
+  rex_perm::register('slice_ui[]', null);
+  rex_perm::register('slice_ui[copy]', null, rex_perm::OPTIONS);
+  rex_perm::register('slice_ui[status]', null, rex_perm::OPTIONS);
+  rex_perm::register('slice_ui[move]', null, rex_perm::OPTIONS);
   rex_perm::register('slice_ui[settings]', null, rex_perm::OPTIONS);
 }
 
