@@ -5,7 +5,7 @@ supportpage: http://www.factorylabs.ch
 
 requires:
   packages:
-    structure: '>=5.0 alpha'
+    structure: '>=2.0.0-beta1'
 
 page:
     title: 'translate:title'
