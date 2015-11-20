@@ -22,12 +22,26 @@ if(rex::isBackend() && is_object(rex::getUser())) {
   rex_perm::register('slice_ui[settings]', null, rex_perm::OPTIONS);
 }
 
-if(rex::isBackend()) {
-  rex_view::addCssFile($this->getAssetsUrl('slice_ui.css'));
-  rex_view::addCssFile($this->getAssetsUrl('jquery-ui.datepicker.css'));
+rex_extension::register('BE_ASSETS',function($ep) {
+  $Subject = $ep->getSubject()?$ep->getSubject():[];
+  return array_merge($Subject,[
+    'files' => [
+      $this->getPath('slice_ui.less'),
+      $this->getPath('slice_ui.scss|formatter:minimized'),
+      $this->getPath('jquery-ui.datepicker.less'),
+      $this->getPath('slice_ui.js'),
+      $this->getPath('jquery-ui.datepicker.js'),
+    ],
+    'addon' => $this->getPackageId(),
+  ]);
+});
 
-  rex_view::addJsFile($this->getAssetsUrl('slice_ui.js'));
-  rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.js'));
+if(rex::isBackend()) {
+  // rex_view::addCssFile($this->getAssetsUrl('slice_ui.css'));
+  // rex_view::addCssFile($this->getAssetsUrl('jquery-ui.datepicker.css'));
+
+  // rex_view::addJsFile($this->getAssetsUrl('slice_ui.js'));
+  // rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.js'));
 }
 
 if(rex_post('update_slice_status') != 1 && rex_get('function') == '')
