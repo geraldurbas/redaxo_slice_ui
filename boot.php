@@ -22,26 +22,26 @@ if(rex::isBackend() && is_object(rex::getUser())) {
   rex_perm::register('slice_ui[settings]', null, rex_perm::OPTIONS);
 }
 
-rex_extension::register('BE_ASSETS',function($ep) {
-  $Subject = $ep->getSubject()?$ep->getSubject():[];
-  return array_merge($Subject,[
-    'files' => [
-      $this->getPath('slice_ui.less'),
-      $this->getPath('slice_ui.scss|formatter:minimized'),
-      $this->getPath('jquery-ui.datepicker.less'),
-      $this->getPath('slice_ui.js'),
-      $this->getPath('jquery-ui.datepicker.js'),
-    ],
-    'addon' => $this->getPackageId(),
-  ]);
-});
+if(rex_addon::get('assets')->isInstalled()) {
+  rex_extension::register('BE_ASSETS',function($ep) {
+    $Subject = $ep->getSubject()?$ep->getSubject():[];
+    $Subject[$this->getPackageId()] = [
+      'files' => [
+        $this->getPath('assets/slice_ui.less'),
+        $this->getPath('assets/jquery-ui.datepicker.less'),
+        $this->getPath('assets/slice_ui.js'),
+        $this->getPath('assets/jquery-ui.datepicker.js'),
+      ],
+      'addon' => $this->getPackageId(),
+    ];
+    return $Subject;
+  });
+} elseif(rex::isBackend()) {
+  rex_view::addCssFile($this->getAssetsUrl('slice_ui.less.min.css'));
+  rex_view::addCssFile($this->getAssetsUrl('jquery-ui.datepicker.less.min.css'));
 
-if(rex::isBackend()) {
-  // rex_view::addCssFile($this->getAssetsUrl('slice_ui.css'));
-  // rex_view::addCssFile($this->getAssetsUrl('jquery-ui.datepicker.css'));
-
-  // rex_view::addJsFile($this->getAssetsUrl('slice_ui.js'));
-  // rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.js'));
+  rex_view::addJsFile($this->getAssetsUrl('slice_ui.jsmin.min.js'));
+  rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.jsmin.min.js'));
 }
 
 if(rex_post('update_slice_status') != 1 && rex_get('function') == '')
@@ -51,8 +51,22 @@ rex_extension::register('SLICE_SHOW','slice_ui::isActive');
 if(strpos(rex_request('page'),'content/emptyclipboard') !== false)
   slice_ui::emptyClipboard();
 
-if(!empty($Config['general']['sticky_slice_nav']) && $Config['general']['sticky_slice_nav'])
-  rex_view::addJsFile($this->getAssetsUrl('sticky_header.js'));
+if(!empty($Config['general']['sticky_slice_nav']) && $Config['general']['sticky_slice_nav']) {
+  if(rex_addon::get('assets')->isInstalled()) {
+    rex_extension::register('BE_ASSETS',function($ep) {
+      $Subject = $ep->getSubject()?$ep->getSubject():[];
+      $Subject[$this->getPackageId()][] = [
+        'files' => [
+          $this->getPath('assets/sticky_header.js'),
+        ],
+        'addon' => $this->getPackageId(),
+      ];
+      return $Subject;
+    });
+  } elseif(rex::isBackend()) {
+    rex_view::addJsFile($this->getAssetsUrl('sticky_header.jsmin.min.js'));
+  }
+}
 
 if(strpos(rex_request('page'),'content/paste') !== false)
   slice_ui::addSlice();
