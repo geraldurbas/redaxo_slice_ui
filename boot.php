@@ -55,12 +55,7 @@ if(!empty($Config['general']['sticky_slice_nav']) && $Config['general']['sticky_
   if(rex_addon::get('assets')->isInstalled()) {
     rex_extension::register('BE_ASSETS',function($ep) {
       $Subject = $ep->getSubject()?$ep->getSubject():[];
-      $Subject[$this->getPackageId()][] = [
-        'files' => [
-          $this->getPath('assets/sticky_header.js'),
-        ],
-        'addon' => $this->getPackageId(),
-      ];
+      $Subject[$this->getPackageId()]['files'][] = $this->getPath('assets/sticky_header.js');
       return $Subject;
     });
   } elseif(rex::isBackend()) {
