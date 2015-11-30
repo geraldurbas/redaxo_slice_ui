@@ -162,8 +162,7 @@ $(document).on('ready pjax:success',function(){
   });
 
 
-
-  $('.btn-visible,.btn-invisible').click(function(e) {
+  $('.rex-slice-output .btn-visible,.rex-slice-output .btn-invisible').click(function(e) {
     var state = this.getAttribute('data-state');
     e.preventDefault();
 
@@ -198,7 +197,6 @@ $(document).on('ready pjax:success',function(){
       handle: ".btn-move-up-n-down",
       start: function(event,ui) {
         startPosition = (((ui.item.index()-1)/2)+1);
-        console.log(startPosition);
         $('.rex-page-main').addClass('noSelect');
         lastSorted = ui.item.prev();
         $('.rex-slice-select').stop().animate({opacity:0});

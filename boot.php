@@ -30,7 +30,7 @@ if(rex_addon::get('assets')->isInstalled()) {
         $this->getPath('assets/slice_ui.less'),
         $this->getPath('assets/jquery-ui.datepicker.less'),
         $this->getPath('assets/slice_ui.js'),
-        $this->getPath('assets/jquery-ui.datepicker.js'),
+        $this->getPath('assets/jquery-ui.datepicker.js|compressed'),
       ],
       'addon' => $this->getPackageId(),
     ];

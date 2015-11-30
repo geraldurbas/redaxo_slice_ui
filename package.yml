@@ -1,5 +1,5 @@
 package: slice_ui
-version: '2.1.2'
+version: '2.1.3'
 author: Sascha Weidner
 supportpage: http://www.factorylabs.ch
 
@@ -8,10 +8,9 @@ requires:
     structure: '>=2.0.0-beta1'
 
 page:
-    title: 'translate:title'
-    pjax: true
-    perm: slice_ui[]
-    icon: rex-icon rex-icon-copy
-    subpages:
-        settings: { title: 'translate:settings', perm: slice_ui[settings]}
-        help: { title: 'translate:help'}
+  title: 'translate:title'
+  perm: slice_ui[]
+  icon: rex-icon rex-icon-copy
+  subpages:
+    settings: { title: 'translate:settings', perm: slice_ui[settings]}
+    help: { title: 'translate:help'}
