@@ -6,7 +6,6 @@ Das Addon erweitert die Standardfunktionen um AJAX-Aufrufe und bietet einige nü
 <br><br><br>
 <b>Features</b>
 <br><br>
-
 <ul>
   <li>Move Up/Down ohne reload</li>
   <li>Online/Offline ohne reload</li>

@@ -84,6 +84,3 @@ if(is_object(rex::getUser()) && (rex_request('page','string') === 'content/copy'
 if(!empty($Config['general']['copy_n_cut']) && $Config['general']['copy_n_cut']) {
   slice_ui::extendSliceButtons();
 }
-
-// if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-//   die();
