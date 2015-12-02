@@ -28,7 +28,7 @@
   <div class="form-group">
     <label class="col-sm-2 control-label" for="value_4">VALUE 4:</label>
     <div class="col-sm-10">
-      <textarea cols="1" rows="6" class="form-control" id="value_4" name="REX_INPUT_VALUE[4]">REX_VALUE[4]</textarea>
+      <textarea class="form-control" id="value_4" name="REX_INPUT_VALUE[4]">REX_VALUE[4]</textarea>
     </div>
   </div>
 </fieldset>
