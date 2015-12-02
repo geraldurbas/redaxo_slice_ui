@@ -26,9 +26,9 @@
   </div>
 
   <div class="form-group">
-    <label class="col-sm-2 control-label">VALUE 4:</label>
+    <label class="col-sm-2 control-label" for="value_4">VALUE 4:</label>
     <div class="col-sm-10">
-      <textarea cols="1" rows="6" class="form-control" id="value_4"  name="REX_INPUT_VALUE[4]">REX_VALUE[4]</textarea>
+      <textarea cols="1" rows="6" class="form-control" id="value_4" name="REX_INPUT_VALUE[4]">REX_VALUE[4]</textarea>
     </div>
   </div>
 </fieldset>
@@ -54,8 +54,6 @@
         <input class="form-control" id="json_value_5_<?=$index;?>_title" type="text" name="REX_INPUT_VALUE[5][<?=$index;?>][title]" value="<?=$data['title'];?>">
       </div>
     </div>
-
-
 
     <div class="form-group">
       <label class="col-sm-2 control-label" for="json_value_5_<?=$index;?>_eins">Eins:</label>
