@@ -44,7 +44,7 @@ $(document).on('ready pjax:success',function(){
       updateIndex(parent.next(),(parent.index()).toString(),-1,1);
       parent.insertAfter(parent.next());
       updateIndex(parent,replace.toString(),1,1);
-      //if(typeof redactorInit === 'function') redactorInit();
+      if(typeof redactorInit === 'function') redactorInit();
     });
 
     json.find('.btn-add').click(function(){
@@ -53,7 +53,7 @@ $(document).on('ready pjax:success',function(){
           replace = parent.index() - 1;
 
       updateIndex(newBlock,replace.toString(),1);
-      //if(typeof redactorInit === 'function') redactorInit();
+      if(typeof redactorInit === 'function') redactorInit();
       $json = $('fieldset [data-json]');
     });
 
@@ -102,7 +102,7 @@ $(document).on('ready pjax:success',function(){
         }
       }
 
-      //if(typeof redactorInit === 'function') redactorInit();
+      if(typeof redactorInit === 'function') redactorInit();
       $json = $('fieldset [data-json]');
     });
   });
