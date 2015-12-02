@@ -30,12 +30,12 @@ $(document).on('ready pjax:success',function(){
           blocks = 0;
 
       $config.each(function(key) {
-        if(min > $(this).find('[data-json]').length) {
+        if(min !== undefined && min > $(this).find('[data-json]').length) {
           submit = false;
           error[blocks] = (blocks+1)+'.) Es müssen mindestens '+min+' Blöcke definiert werden!';
           blocks++;
         }
-        if(max < $(this).find('[data-json]').length) {
+        if(max !== undefined && max < $(this).find('[data-json]').length) {
           submit = false;
           error[blocks] = 'Es dürfen maximal '+max+' Blöcke definiert werden!';
           blocks++;
@@ -83,7 +83,7 @@ $(document).on('ready pjax:success',function(){
           replace = parent.index() - 1,
           maxBlocks = config.data('max');
 
-      if(parent.siblings('[data-json]').andSelf().length >= maxBlocks)
+      if(maxBlocks !== undefined && parent.siblings('[data-json]').andSelf().length >= maxBlocks)
         return;
 
       newBlock = parent.clone(1).insertAfter(parent);
