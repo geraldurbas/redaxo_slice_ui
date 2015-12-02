@@ -16,8 +16,37 @@ function updateIndex(newBlock,replace,step) {
   if(newBlock.next('[data-json]').length > 0 && !concat)
     updateIndex(newBlock.next('[data-json]'),(parseInt(replace,10)+Math.abs(step)).toString(),step);
 }
+
 $(document).on('ready pjax:success',function(){
-  var $json = $('fieldset [data-json]');
+  var $json = $('fieldset [data-json]'),
+      $config = $('.ui_json_blocks');
+
+  if($config.length > 0) {
+    $('#REX_FORM').submit(function(e){
+      var min = $config.data('min'),
+          max = $config.data('max'),
+          submit = true,
+          error = [],
+          blocks = 0;
+
+      $config.each(function(key) {
+        if(min > $(this).find('[data-json]').length) {
+          submit = false;
+          error[blocks] = (blocks+1)+'.) Es müssen mindestens '+min+' Blöcke definiert werden!';
+          blocks++;
+        }
+        if(max < $(this).find('[data-json]').length) {
+          submit = false;
+          error[blocks] = 'Es dürfen maximal '+max+' Blöcke definiert werden!';
+          blocks++;
+        }
+      });
+      if(!submit) {
+        e.preventDefault();
+        alert(error.join("\n"));
+      }
+    });
+  }
 
   $json.each(function(){
     var json = $(this);
@@ -49,8 +78,15 @@ $(document).on('ready pjax:success',function(){
 
     json.find('.btn-add').click(function(){
       var parent = $(this).parents('[data-json]'),
-          newBlock = parent.clone(1).insertAfter(parent),
-          replace = parent.index() - 1;
+          config = parent.parents('.ui_json_blocks').eq(0),
+          newBlock = null,
+          replace = parent.index() - 1,
+          maxBlocks = config.data('max');
+
+      if(parent.siblings('[data-json]').andSelf().length >= maxBlocks)
+        return;
+
+      newBlock = parent.clone(1).insertAfter(parent);
 
       updateIndex(newBlock,replace.toString(),1);
       if(typeof redactorInit === 'function') redactorInit();
