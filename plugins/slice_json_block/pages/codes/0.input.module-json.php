@@ -143,7 +143,7 @@
     <div class="form-group">
       <label class="col-sm-2 control-label" for="json_value_5_<?=$index;?>_fuenf">Fünf</label>
       <div class="col-sm-10">
-        <textarea class="form-control rredactorEditor-full" id="rredactor_json_value_5_<?=$index;?>_fuenf" name="REX_INPUT_VALUE[5][<?=$index;?>][fuenf]"><?=$data['fuenf'];?></textarea>
+        <textarea class="form-control redactorEditor-full" id="redactor_json_value_5_<?=$index;?>_fuenf" name="REX_INPUT_VALUE[5][<?=$index;?>][fuenf]"><?=$data['fuenf'];?></textarea>
       </div>
     </div>
 

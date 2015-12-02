@@ -51,18 +51,6 @@ rex_extension::register('SLICE_SHOW','slice_ui::isActive');
 if(strpos(rex_request('page'),'content/emptyclipboard') !== false)
   slice_ui::emptyClipboard();
 
-if(!empty($Config['general']['sticky_slice_nav']) && $Config['general']['sticky_slice_nav']) {
-  if(rex_addon::get('assets')->isInstalled()) {
-    rex_extension::register('BE_ASSETS',function($ep) {
-      $Subject = $ep->getSubject()?$ep->getSubject():[];
-      $Subject[$this->getPackageId()]['files'][] = $this->getPath('assets/sticky_header.js');
-      return $Subject;
-    });
-  } elseif(rex::isBackend()) {
-    rex_view::addJsFile($this->getAssetsUrl('sticky_header.jsmin.min.js'));
-  }
-}
-
 if(strpos(rex_request('page'),'content/paste') !== false)
   slice_ui::addSlice();
 
