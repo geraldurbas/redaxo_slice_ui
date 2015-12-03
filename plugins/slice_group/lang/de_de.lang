@@ -1,1 +1,12 @@
+
+slice_group_templates_caption = Liste der angelegten Gruppen-Templates
+slice_group_delete = Löschen
+slice_group_templates_description = Gruppenbeschreibung
+slice_group_group = Gruppe:
+
+slice_group_confirm_delete = Dieses Template wirklich löschen?
+slice_group_template_cannot_be_deleted = Gruppen-Template <b>{0}</b> kann nicht gelöscht werden, da es noch von folgenden Artikeln genutzt wird:
+slice_group_template_deleted = Gruppen-Template erfolgreich gelöscht
+slice_group_template_not_found = Gruppen-Template konnte nicht gefunden werden
+
 perm_options_slice_group[] = Slice UI: Slices gruppieren
