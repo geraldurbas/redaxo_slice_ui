@@ -10,7 +10,7 @@ if(is_object(rex::getUser())) {
     rex_perm::register('slice_ui[editall]', null, rex_perm::OPTIONS);
 
   if(rex::getUser()->hasPerm('slice_ui[editall]')) {
-    rex_extension::register('ADD_AFTER_SLICE','slice_footer::editAll');
+    rex_extension::register('SLICE_FOOTER','slice_footer::editAll');
     // slice_footer::extendSliceButtons();
 
     if(strpos(rex_request('page'),'content/editall') !== false)
@@ -19,6 +19,6 @@ if(is_object(rex::getUser())) {
       slice_footer::deleteSlices();
 
     rex_extension::register('STRUCTURE_CONTENT_BEFORE_SLICES','slice_footer::addFooterForm');
-    rex_extension::register('STRUCTURE_CONTENT_AFTER_SLICES','slice_footer::addFooterForm');
+    rex_extension::register('STRUCTURE_CONTENT_AFTER_SLICES','slice_footer::addFooterForm',rex_extension::LATE);
   }
 }

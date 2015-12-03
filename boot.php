@@ -22,7 +22,7 @@ if(rex::isBackend() && is_object(rex::getUser())) {
   rex_perm::register('slice_ui[settings]', null, rex_perm::OPTIONS);
 }
 
-if(rex_addon::get('assets')->isInstalled()) {
+if(rex_addon::get('assets')->isAvailable()) {
   rex_extension::register('BE_ASSETS',function($ep) {
     $Subject = $ep->getSubject()?$ep->getSubject():[];
     $Subject[$this->getPackageId()] = [

@@ -1,6 +1,6 @@
 <?php
 
-if(rex_addon::get('assets')->isInstalled()) {
+if(rex_addon::get('assets')->isAvailable()) {
   rex_extension::register('BE_ASSETS',function($ep) {
     $Subject = $ep->getSubject()?$ep->getSubject():[];
     $Subject[$this->getPackageId()] = [

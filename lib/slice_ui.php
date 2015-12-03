@@ -112,13 +112,13 @@ class slice_ui {
 
     $content = '';
     $Subject = $ep->getSubject();
-    if(rex::isBackend() && !empty($Config['online_from_to']) && (in_array($ep->getParam('module_id'),$Config['online_from_to']) || in_array('all',$Config['online_from_to']))) {
-      
-      $sql = rex_sql::factory();
-      $sql->setTable(rex::getTablePrefix().'article_slice');
-      $sql->setWhere(array('id'=>$ep->getParam('slice_id')));
-      $sql->select();
 
+    $sql = rex_sql::factory();
+    $sql->setTable(rex::getTablePrefix().'article_slice');
+    $sql->setWhere(array('id'=>$ep->getParam('slice_id')));
+    $sql->select();
+
+    if(rex::isBackend() && !empty($Config['online_from_to']) && (in_array($ep->getParam('module_id'),$Config['online_from_to']) || in_array('all',$Config['online_from_to']))) {
       $online_from = $sql->getValue('online_from');
       $online_to = $sql->getValue('online_to');
 
@@ -158,15 +158,20 @@ class slice_ui {
     if($strContent)
       $content .= $strContent;
     
+    $strContent = '';
     $Subject = str_replace('<div class="panel-body">',$content.'<div class="panel-body">',$Subject);
 
-    $strContent = rex_extension::registerPoint(new rex_extension_point('ADD_AFTER_SLICE', '', [
+    $strContent = rex_extension::registerPoint(new rex_extension_point('SLICE_FOOTER', '', [
       'slice_id' => $ep->getParam('slice_id'),
       'article_id' => $ep->getParam('article_id'),
       'clang' => $ep->getParam('clang'),
       'ctype' => $ep->getParam('ctype'),
+      'slice_data' => $sql,
       'content' => $Subject
     ]));
+
+    if($strContent)
+      $content .= $strContent;
 
     if($strContent) {
       $fragment = new rex_fragment();
@@ -174,6 +179,30 @@ class slice_ui {
       $strContent = $fragment->parse('panel/footer.php');
       $Subject = preg_replace('|(<\/div>)([^<]*<\/div>[^<]*<\/section>[^<]*<\/li>$)|is','$1'.$strContent.'$2',$Subject);
     }
+    
+    $strContent = rex_extension::registerPoint(new rex_extension_point('BEFORE_SLICE', '', [
+      'slice_id' => $ep->getParam('slice_id'),
+      'article_id' => $ep->getParam('article_id'),
+      'clang' => $ep->getParam('clang'),
+      'ctype' => $ep->getParam('ctype'),
+      'slice_data' => $sql,
+      'content' => $Subject
+    ]));
+
+    if($strContent)
+      $Subject = $strContent.$Subject;
+
+    $strContent = rex_extension::registerPoint(new rex_extension_point('AFTER_SLICE', '', [
+      'slice_id' => $ep->getParam('slice_id'),
+      'article_id' => $ep->getParam('article_id'),
+      'clang' => $ep->getParam('clang'),
+      'ctype' => $ep->getParam('ctype'),
+      'slice_data' => $sql,
+      'content' => $Subject
+    ]));
+
+    if($strContent)
+      $Subject .= $strContent;
 
     return $Subject;
   }

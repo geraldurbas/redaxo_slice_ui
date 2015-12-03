@@ -58,9 +58,10 @@ class slice_footer {
   // }
 
   public static function addFooterForm(rex_extension_point $ep) {
+    $Subject = $ep->getSubject();
     $fragment = new rex_fragment();
       $fragment->setVar('deletePath', 'index.php?page=content/delete&article_id='.$ep->getParam('article_id').'&mode=edit&module_id='.$ep->getParam('module_id').'&slice_id='.$ep->getParam('slice_id').'&clang='.$ep->getParam('clang').'&ctype='.$ep->getParam('ctype'), false);
-    return $fragment->parse('page/footer.php');
+    return $Subject.$fragment->parse('page/footer.php');
   }
 
 }

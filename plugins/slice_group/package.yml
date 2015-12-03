@@ -1,0 +1,16 @@
+package: slice_ui/slice_group
+version: '1.0.0alpha'
+author: Sascha Weidner
+supportpage: www.factorylabs.com
+
+requires:
+  packages:
+    structure: '>=2.0.0-beta1'
+
+page:
+  title: 'translate:slice_group'
+  icon: rex-icon fa-help
+  perm: slice_group[templates]
+  pjax: false
+  subpages:
+      index: { title: 'translate:overview' }
