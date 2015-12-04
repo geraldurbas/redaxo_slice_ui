@@ -24,6 +24,8 @@ foreach($fields as $fieldname => $fieldtype) {
 $fields = [
   'start_wrapper'=>'text NULL',
   'end_wrapper'=>'text NULL',
+  'option_min'=>'int(10) unsigned NOT NULL',
+  'option_max'=>'int(10) unsigned NOT NULL',
 ];
   
 $cols = rex_sql::showColumns(rex::getTablePrefix().'slice_groups');

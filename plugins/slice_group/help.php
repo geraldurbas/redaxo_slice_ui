@@ -1,2 +1,2 @@
 <p>Slices Gruppieren, mit vordefinierten Templates</p>
-<p>Dieses Plugin kann aktuell nur Slices im Backend gruppieren und es beißt sich mit den Grundfunktionen fon Slice UI</p>
+<p>Dieses Plugin beißt sich mit den Grundfunktionen von Slice UI</p>
