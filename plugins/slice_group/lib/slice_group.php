@@ -69,11 +69,75 @@ class slice_group {
   public static function closeGroups(rex_extension_point $ep) {
     $Subject = $ep->getSubject();
 
+    if(($groups = self::getOpenGroups($ep->getParam('article_id'))))
+      for($c=0;$c<$groups;$c++)
+        $Subject .= "</ul></li>\n";
+
+    return $Subject;
+  }
+
+  public static function fronendGroups(rex_extension_point $ep) {
+    $Subject = $ep->getSubject();
+    $Slice = $ep->getParam('slice_data');
+    $isLast = $Slice->getRows() === ($Slice->key()+1);
+    $article_id = $ep->getParam($article_id);
+    $Plugin = rex_plugin::get('slice_ui','slice_group');
+
+    $Config = $Plugin->getProperty('groups');
+
+    if(empty($Config[$article_id]))
+      $Config[$article_id] = [];
+
+    $Config = $Config[$article_id];
+
+    $Template = [];
+
+    if(($GroupTemplate = $Slice->getValue('group_template')) != '0') {
+
+      $Groups = rex_sql::factory();
+      $Groups->setTable(rex::getTablePrefix().'slice_groups');
+      $Groups->setWhere(array('id'=>$GroupTemplate));
+      $Groups->select();
+
+
+      $Template = $Groups->getArray()[0];
+      if(!empty($Template['output']))
+        $Subject = str_replace('%CONTENT%',$Subject,$Template['output'])."\n";
+
+      $Subject = $Template['start_wrapper'].$Subject;
+      $Config[] = json_encode($Template);
+    }
+
+    if(empty($Template)) {
+      $Template = json_decode(end($Config),true);
+      if(!empty($Template['output']))
+        $Subject = str_replace('%CONTENT%',$Subject,$Template['output']);
+    }
+
+
+    if($Slice->getValue('group_closed') == 1) {
+      $Subject .= "\n".$Template['end_wrapper']."\n";
+      array_pop($Config); 
+    }
+
+    $Plugin->setProperty('groups',[$article_id=>$Config]);
+
+    if($isLast) {
+      if(($groups = count($Config)))
+        for($c=$groups;$c>0;$c++) {
+          $Subject .= "\n".$Config[$c]['end_wrapper']."\n";
+        }
+    }
+
+    return $Subject;
+  }
+
+  public static function getOpenGroups($article_id) {
     $open = $closed = 0;
 
     $sql = rex_sql::factory();
     $sql->setTable(rex::getTablePrefix().'article_slice');
-    $sql->setWhere(array('article_id'=>$ep->getParam('article_id')));
+    $sql->setWhere(array('article_id'=>$article_id));
     $sql->select();
 
     if(!$sql->getRows()) return $Subject;
@@ -86,10 +150,6 @@ class slice_group {
       $sql->next();
     }
 
-    if($open > $closed)
-      for($c=0;$c<$open-$closed;$c++)
-        $Subject .= "</ul></li>\n";
-
-    return $Subject;
+    return ($open > $closed);
   }
 }

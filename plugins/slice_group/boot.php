@@ -37,13 +37,10 @@ if(rex_post('change_group_template','string') === '1') {
   }
 }
 
-if(rex::isBackend()) {
+if(rex::isBackend() && rex_post('update_slice_status') != 1 && rex_get('function') == '') {
   rex_extension::register('BEFORE_SLICE','slice_group::setupGroup');
   rex_extension::register('AFTER_SLICE','slice_group::closeGroup');
   rex_extension::register('STRUCTURE_CONTENT_AFTER_SLICES','slice_group::closeGroups');
-} else {
-  rex_extension::register('MODULE_OUTPUT',function(rex_extension_point $ep){
-    $Subject = $ep->getSubject();
-    return '---<br>'.$Subject.'///<br><br>';
-  });
+} elseif(!rex::isBackend()) {
+  rex_extension::register('SLICE_OUTPUT','slice_group::fronendGroups');
 }

@@ -13,8 +13,9 @@ $template_id = rex_request('template_id', 'int');
 $action_id = rex_request('action_id', 'int');
 $iaction_id = rex_request('iaction_id', 'int'); // id der module-action relation
 $mname = rex_request('mname', 'string');
-$eingabe = rex_request('eingabe', 'string');
+$start_wrapper = rex_request('start_wrapper', 'string');
 $ausgabe = rex_request('ausgabe', 'string');
+$end_wrapper = rex_request('end_wrapper', 'string');
 $goon = rex_request('goon', 'string');
 $add_action = rex_request('add_action', 'string');
 
@@ -76,7 +77,9 @@ if ($function == 'add' or $function == 'edit') {
                 $IMOD = rex_sql::factory();
                 $IMOD->setTable(rex::getTablePrefix() . 'slice_groups');
                 $IMOD->setValue('name', $mname);
+                $IMOD->setValue('start_wrapper', $start_wrapper);
                 $IMOD->setValue('output', $ausgabe);
+                $IMOD->setValue('end_wrapper', $end_wrapper);
                 $IMOD->addGlobalCreateFields();
 
                 $IMOD->insert();
@@ -92,7 +95,9 @@ if ($function == 'add' or $function == 'edit') {
                     $UMOD->setTable(rex::getTablePrefix() . 'slice_groups');
                     $UMOD->setWhere(['id' => $template_id]);
                     $UMOD->setValue('name', $mname);
+                    $UMOD->setValue('start_wrapper', $start_wrapper);
                     $UMOD->setValue('output', $ausgabe);
+                    $UMOD->setValue('end_wrapper', $end_wrapper);
                     $UMOD->addGlobalUpdateFields();
 
                     $UMOD->update();
@@ -131,8 +136,9 @@ if ($function == 'add' or $function == 'edit') {
             $hole = rex_sql::factory();
             $hole->setQuery('SELECT * FROM ' . rex::getTablePrefix() . 'slice_groups WHERE id=' . $template_id);
             $mname = $hole->getValue('name');
+            $start_wrapper = $hole->getValue('start_wrapper');
             $ausgabe = $hole->getValue('output');
-            $eingabe = $hole->getValue('input');
+            $end_wrapper = $hole->getValue('end_wrapper');
         } else {
             $legend = rex_i18n::msg('create_module');
         }
@@ -168,8 +174,18 @@ if ($function == 'add' or $function == 'edit') {
         $formElements[] = $n;
 
         $n = [];
+        $n['label'] = '<label for="mstart_wrapper">' . rex_i18n::msg('start_wrapper') . '</label>';
+        $n['field'] = '<textarea class="form-control rex-code codemirror" codemirror-mode="php/htmlmixed" id="mstart_wrapper" name="start_wrapper">' . htmlspecialchars($start_wrapper) . '</textarea>';
+        $formElements[] = $n;
+
+        $n = [];
         $n['label'] = '<label for="moutput">' . rex_i18n::msg('output') . '</label>';
         $n['field'] = '<textarea class="form-control rex-code codemirror" und codemirror-mode="php/htmlmixed" id="moutput" name="ausgabe">' . htmlspecialchars($ausgabe) . '</textarea>';
+        $formElements[] = $n;
+
+        $n = [];
+        $n['label'] = '<label for="mend_wrapper">' . rex_i18n::msg('end_wrapper') . '</label>';
+        $n['field'] = '<textarea class="form-control rex-code codemirror" codemirror-mode="php/htmlmixed" id="mend_wrapper" name="end_wrapper">' . htmlspecialchars($end_wrapper) . '</textarea>';
         $formElements[] = $n;
 
         $fragment = new rex_fragment();
