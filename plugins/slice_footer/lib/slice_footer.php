@@ -42,21 +42,6 @@ class slice_footer {
     die();
   }
 
-  // public static function extendSliceButtons() {
-  //   // ----- EXTENSION POINT
-  //   $hideButtons = rex_extension::registerPoint(new rex_extension_point('HIDE_EDIT_ALL_BUTTONS', '', []));
-
-  //   if($_SESSION[__CLASS__]['active'] == 0 && !$hideButtons && (rex_get('page_buttons') == '' || strpos(rex_get('page_buttons'),__CLASS__) !== false)) {
-  //     $Content = rex_plugin::get('structure','content');
-  //     $ContentPages = $Content->getProperty('pages');
-  //     $ContentPages['content']['subpages']['editall'] = array(
-  //       'title'=>'Mehrere bearbeiten',
-  //       'icon'=>'rex-icon rex-icon-edit',
-  //     );
-  //     $Content->setProperty('pages',$ContentPages);
-  //   }
-  // }
-
   public static function addFooterForm(rex_extension_point $ep) {
     $Subject = $ep->getSubject();
     $fragment = new rex_fragment();
