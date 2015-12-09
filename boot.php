@@ -44,7 +44,7 @@ if(rex_addon::get('assets')->isAvailable()) {
   rex_view::addJsFile($this->getAssetsUrl('jquery-ui.datepicker.jsmin.min.js'));
 }
 
-if(rex_post('update_slice_status') != 1 && rex_get('function') == '')
+if(rex_post('update_slice_status') != 1 && rex_post('btn_update') != 1 && rex_get('function') == '')
   rex_extension::register('SLICE_SHOW','slice_ui::extendBackendSlices');
 rex_extension::register('SLICE_SHOW','slice_ui::isActive');
 
