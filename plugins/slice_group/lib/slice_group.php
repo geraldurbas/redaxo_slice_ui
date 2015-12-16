@@ -132,6 +132,37 @@ class slice_group {
     return $Subject;
   }
 
+  public static function updatedMovedSlices() {
+    // ?article_id=1&slice_id=1&clang=1&ctype=1&upd=1450157657&rex-api-call=content_move_slice&direction=movedown#slice1
+
+    $article_id = rex_get('article_id','int');
+    $slice_id = rex_get('slice_id','int');
+    $ctype = rex_get('ctype','int');
+    $clang = rex_request('clang', 'int');
+
+    $sql = rex_sql::factory()
+            ->setTable(rex::getTablePrefix() . 'article_slice')
+            ->setWhere(['id'=>$slice_id,'clang'=>$clang])
+            ->select();
+
+    if(!$sql->getRows()) return;
+
+    $SiblingSQL = rex_sql::factory()->setTable(rex::getTablePrefix() . 'article_slice');
+    $Sibling['prev'] = $SiblingSQL->setWhere(['priority'=>($sql->getValue('priority')-1)])->select()->getArray();
+    $Sibling['next'] = $SiblingSQL->setWhere(['priority'=>($sql->getValue('priority')+1)])->select()->getArray();
+
+    $direction = rex_get('direction','string');
+    if ($direction === 'moveup' || $direction === 'movedown') {
+      if ($direction === 'moveup') {
+        if($sql->getValue('group_template') != 0) {
+          
+        }
+      } elseif($direction === 'movedown') {
+        
+      }
+    }
+  }
+
   public static function getOpenGroups($article_id) {
     $open = $closed = 0;
 

@@ -2,6 +2,9 @@
 
 if(rex::isBackend() && is_object(rex::getUser())) {
   rex_perm::register('slice_group[]', null, rex_perm::OPTIONS);
+  if(rex_post('rex-api-call','string') === 'content_move_slice') {
+    slice_group::updatedMovedSlices();
+  }
 }
 
 if(is_object(rex::getUser()) && (!rex::getUser()->hasPerm('slice_group[]') || rex::getUser()->isAdmin())) {
