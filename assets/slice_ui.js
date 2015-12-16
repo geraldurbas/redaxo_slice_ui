@@ -39,7 +39,6 @@ function moveSlice($el,dir) {
 }
 
 function setupSortable(sortable_list) {
-  console.log('Sortable');
   sortable_list.sortable({
     axis: 'y',
     scroll: true,
@@ -240,7 +239,6 @@ $(document).on('ready pjax:success',function(){
     /* Remove buttons if javascript is enabled, we don't need'em */
     if($('.btn-move-up-n-down').is('.remove_arrows'))
       $('.rex-icon-up,.rex-icon-down').parents('.btn-group').remove();
-
-    setupSortable($('.rex-main-content > .rex-slices'));
+    setupSortable($('#rex-js-page-main-content > .rex-slices'));
   }
 });})(jQuery);
