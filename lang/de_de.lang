@@ -60,6 +60,8 @@ perm_options_slice_ui[move] = Slices verschieben
 perm_options_slice_ui[status] = Slices online / offline
 perm_options_slice_ui[settings] = Slice UI konfigurieren
 
+choose_modules_slices = Folgende Einstellung definiert, welche Module kopiert werden können.
+
 
 #Buttons
 save = Übernehmen

@@ -127,6 +127,8 @@ $(document).on('ready pjax:success',function(){
 
     $('.rex-slice-output .btn-copy,.rex-slice-output .btn-paste').fadeIn();
     $('.rex-slice-output.copied').removeClass('copied');
+
+    $('body').removeClass('copy');
     
     $.ajax({
       url: this.href
@@ -193,22 +195,22 @@ $(document).on('ready pjax:success',function(){
 
 
 
-  $('.rex-slice-output .btn.btn-delete').unbind().data('confirm','').click(function(e){
-    var parents = $(this).parents('.rex-slice'),
-        check = confirm('Block wirklich löschen?');
-    if(check) {
-      parents.prev().animate({height:'toggle',margin:'toggle',opacity:'toggle'},400,function(){
-        $(this).remove();
-      });
-      parents.animate({height:'toggle',margin:'toggle',opacity:'toggle'},400,function(){
-        $(this).remove();
-      });
+  // $('.rex-slice-output .btn.btn-delete').unbind().data('confirm','').click(function(e){
+  //   var parents = $(this).parents('.rex-slice'),
+  //       check = confirm('Block wirklich löschen?');
+  //   if(check) {
+  //     parents.prev().animate({height:'toggle',margin:'toggle',opacity:'toggle'},400,function(){
+  //       $(this).remove();
+  //     });
+  //     parents.animate({height:'toggle',margin:'toggle',opacity:'toggle'},400,function(){
+  //       $(this).remove();
+  //     });
 
-      $.ajax({url:this.href});
-    }
-    e.preventDefault();
-    return false;
-  });
+  //     $.ajax({url:this.href});
+  //   }
+  //   e.preventDefault();
+  //   return false;
+  // });
 
 
   $('.rex-slice-output .btn-visible,.rex-slice-output .btn-invisible').click(function(e) {

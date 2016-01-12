@@ -10,7 +10,7 @@ if(is_object(rex::getUser())) {
     rex_perm::register('slice_ui[editall]', null, rex_perm::OPTIONS);
 
   if(rex::getUser()->hasPerm('slice_ui[editall]')) {
-    rex_extension::register('SLICE_FOOTER','slice_footer::editAll');
+    rex_extension::register('SLICE_UI_SLICE_FOOTER','slice_footer::editAll');
 
     if(strpos(rex_request('page'),'content/editall') !== false)
       slice_footer::showForm();

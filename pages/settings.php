@@ -22,7 +22,7 @@ if(rex_post('btn_save', 'string') != '') {
 
 
 $sql = rex_sql::factory();
-$modules = $sql->getArray("SELECT id,name FROM ".rex::getTablePrefix()."module");
+$modules = $sql->getArray("SELECT id,name FROM ".rex::getTablePrefix()."module ORDER BY name");
 
 $sections = '';
 
@@ -104,6 +104,7 @@ $fragment->setVar('checked', (!empty($Values) && $Values[0] == 'all'?true:false)
 $fragment->setVar('value', 'all', false);
 $fragment->setVar('label', $this->i18n('modules_available_all'), false);
 $fragment->setVar('toggleFields','.allmodules',false);
+$fragment->setVar('info',rex_i18n::msg('choose_modules_slices'),false);
 $content .= $fragment->parse('form/checkbox.php');
 
 $fragment = new rex_fragment();
