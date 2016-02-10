@@ -4,7 +4,7 @@ Slice UI erweitert Slices um weitere Funktionen wie kopieren, ausschneiden und a
 
 ##Support-Beschleunigung
 
-[https://www.amazon.de/gp/registry/wishlist/3IW6TE09RDGV2](https://www.amazon.de/gp/registry/wishlist/3IW6TE09RDGV2)
+[Amazon Wunschliste](https://www.amazon.de/gp/registry/wishlist/3IW6TE09RDGV2)
 
 ##Features
 
