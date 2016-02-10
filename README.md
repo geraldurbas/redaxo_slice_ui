@@ -2,6 +2,10 @@
 
 Slice UI erweitert Slices um weitere Funktionen wie kopieren, ausschneiden und aktivieren bzw. deaktivieren.
 
+##Support-Beschleunigung
+
+[https://www.amazon.de/gp/registry/wishlist/3IW6TE09RDGV2](https://www.amazon.de/gp/registry/wishlist/3IW6TE09RDGV2)
+
 ##Features
 
 - Move Up/Down ohne reload
